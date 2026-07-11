@@ -1,0 +1,26 @@
+/* ============================================================================
+   FABLEJELLY ADDON — MOTION OFF
+   Freezes every FableJelly animation and transition without touching colour
+   or layout. For low-powered devices, TVs that stutter, or personal taste.
+   (The theme already honours prefers-reduced-motion; this forces it.)
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/addons/motion-off.css");
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+}
+
+.backgroundContainer::before,
+.backgroundContainer::after {
+    animation: none !important;
+}
+
+.homeSectionsContainer > .verticalSection {
+    animation: none !important;
+}

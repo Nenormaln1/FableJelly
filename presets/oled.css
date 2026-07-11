@@ -1,0 +1,20 @@
+/* ============================================================================
+   FABLEJELLY PRESET — OLED
+   True-black canvas for OLED panels; keeps the Nebula accents. The aurora is
+   dimmed but alive — stack addons/ambience-off.css for absolute black.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/oled.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 0, 0, 0;
+    --fj-bg-elevated: 9, 9, 12;
+    --fj-surface: 15, 15, 20;
+    --fj-surface-2: 24, 24, 31;
+    --fj-line: 150, 155, 180;
+
+    --fj-glass: 0, 0, 0;
+    --fj-glass-alpha: 0.72;
+
+    --fj-aurora-opacity: 0.3;
+}

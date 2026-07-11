@@ -1,0 +1,27 @@
+/* ============================================================================
+   FABLEJELLY PRESET — NEBULA (the default)
+   Iris violet → ember peach on deep ink. Shipped built-in; this file exists
+   so you can return to stock after trying other presets, and as a template
+   for building your own.
+   ----------------------------------------------------------------------------
+   Usage (after the core import):
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/nebula.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 9, 10, 16;
+    --fj-bg-elevated: 15, 17, 26;
+    --fj-surface: 21, 24, 36;
+    --fj-surface-2: 30, 34, 50;
+    --fj-line: 148, 158, 190;
+
+    --fj-ink: 236, 239, 248;
+    --fj-ink-dim: 165, 172, 195;
+    --fj-ink-faint: 110, 117, 140;
+
+    --fj-accent: 139, 125, 255;
+    --fj-accent-2: 255, 156, 110;
+    --fj-on-accent: 16, 13, 30;
+
+    --fj-glass: 13, 15, 24;
+}

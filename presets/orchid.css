@@ -1,0 +1,24 @@
+/* ============================================================================
+   FABLEJELLY PRESET — ORCHID
+   Fuchsia → violet on plum-black. The loud one.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/orchid.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 15, 9, 18;
+    --fj-bg-elevated: 22, 14, 27;
+    --fj-surface: 30, 20, 38;
+    --fj-surface-2: 42, 28, 53;
+    --fj-line: 190, 155, 210;
+
+    --fj-ink: 245, 238, 250;
+    --fj-ink-dim: 190, 168, 205;
+    --fj-ink-faint: 135, 112, 150;
+
+    --fj-accent: 236, 100, 196;
+    --fj-accent-2: 158, 116, 255;
+    --fj-on-accent: 28, 10, 28;
+
+    --fj-glass: 18, 11, 22;
+}

@@ -1,0 +1,18 @@
+/* ============================================================================
+   FABLEJELLY ADDON — AMBIENCE OFF
+   Removes the aurora colour fields and any grain for a perfectly flat
+   canvas. Pairs well with presets/oled.css on OLED screens, and saves a
+   little GPU on weak hardware.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/addons/ambience-off.css");
+   ========================================================================== */
+
+:root {
+    --fj-aurora-opacity: 0;
+    --fj-grain-opacity: 0;
+}
+
+.backgroundContainer::before,
+.backgroundContainer::after {
+    display: none;
+}

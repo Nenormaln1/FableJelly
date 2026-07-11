@@ -1,0 +1,24 @@
+/* ============================================================================
+   FABLEJELLY PRESET — EMBER
+   Crimson → amber on warm charcoal. Late-night cinema.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/ember.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 17, 11, 11;
+    --fj-bg-elevated: 24, 16, 15;
+    --fj-surface: 32, 22, 21;
+    --fj-surface-2: 44, 30, 28;
+    --fj-line: 200, 160, 150;
+
+    --fj-ink: 248, 240, 236;
+    --fj-ink-dim: 197, 172, 165;
+    --fj-ink-faint: 142, 116, 110;
+
+    --fj-accent: 255, 96, 99;
+    --fj-accent-2: 255, 183, 77;
+    --fj-on-accent: 32, 12, 10;
+
+    --fj-glass: 20, 13, 12;
+}

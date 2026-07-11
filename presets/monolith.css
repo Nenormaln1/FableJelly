@@ -1,0 +1,28 @@
+/* ============================================================================
+   FABLEJELLY PRESET — MONOLITH
+   Monochrome. Bone white → cool grey; the gradient all but disappears and
+   the glow dials down. For people who want the motion without the colour.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/monolith.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 10, 10, 11;
+    --fj-bg-elevated: 16, 16, 18;
+    --fj-surface: 23, 23, 26;
+    --fj-surface-2: 33, 33, 37;
+    --fj-line: 160, 162, 170;
+
+    --fj-ink: 240, 240, 243;
+    --fj-ink-dim: 172, 174, 182;
+    --fj-ink-faint: 116, 118, 126;
+
+    --fj-accent: 235, 236, 240;
+    --fj-accent-2: 158, 162, 172;
+    --fj-on-accent: 14, 14, 16;
+
+    --fj-glass: 12, 12, 14;
+
+    --fj-glow-alpha: 0.14;
+    --fj-aurora-opacity: 0.22;
+}
