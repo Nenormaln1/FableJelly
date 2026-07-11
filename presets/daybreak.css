@@ -1,0 +1,84 @@
+/* ============================================================================
+   FABLEJELLY PRESET — DAYBREAK
+   The light mode: porcelain canvas, deep-iris and burnt-coral accents.
+   Beyond retinting the tokens it softens shadows and scrims that are tuned
+   for dark canvases in the core.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/daybreak.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 243, 244, 250;
+    --fj-bg-elevated: 250, 250, 253;
+    --fj-surface: 255, 255, 255;
+    --fj-surface-2: 238, 239, 247;
+    --fj-line: 70, 80, 110;
+
+    --fj-ink: 25, 29, 44;
+    --fj-ink-dim: 86, 94, 118;
+    --fj-ink-faint: 140, 148, 170;
+
+    --fj-accent: 104, 84, 255;
+    --fj-accent-2: 240, 110, 68;
+    --fj-on-accent: 255, 252, 250;
+
+    --fj-glass: 250, 250, 254;
+    --fj-glass-alpha: 0.7;
+    --fj-glass-border: rgba(70, 80, 110, 0.16);
+
+    --fj-aurora-opacity: 0.4;
+    --fj-glow-alpha: 0.2;
+}
+
+/* Soften the dark-tuned shadows and scrims */
+.cardScalable {
+    box-shadow: 0 2px 12px -6px rgba(35, 40, 70, 0.18);
+}
+
+@media (hover: hover) {
+    .card:hover .cardScalable {
+        box-shadow: 0 18px 40px -18px rgba(35, 40, 70, 0.35),
+                    0 10px 40px -10px rgba(var(--fj-accent), var(--fj-glow-alpha));
+    }
+}
+
+.cardOverlayContainer {
+    background: linear-gradient(to top,
+        rgba(20, 23, 38, 0.72) 0%,
+        rgba(20, 23, 38, 0.30) 55%,
+        rgba(20, 23, 38, 0.12) 100%) !important;
+}
+
+.cardOverlayButton,
+.cardOverlayButton:hover {
+    color: rgb(245, 246, 252);
+}
+
+.dialogBackdrop {
+    background: rgba(30, 34, 60, 0.35);
+}
+
+.dialog,
+.formDialog,
+.actionSheet,
+.upNextDialog,
+.toast {
+    box-shadow: 0 30px 90px -30px rgba(35, 40, 70, 0.4);
+}
+
+.skinHeader::before {
+    background: linear-gradient(to bottom,
+        rgba(var(--fj-bg), 0.92) 0%,
+        rgba(var(--fj-bg), 0.6) 55%,
+        transparent 100%);
+}
+
+.backdropImage {
+    opacity: 0.35;
+}
+
+/* Media Bar text shadows read differently on porcelain */
+#slides-container .plot,
+#slides-container .info-container {
+    text-shadow: 0 1px 10px rgba(255, 255, 255, 0.35);
+}

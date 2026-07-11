@@ -1,0 +1,18 @@
+/* ============================================================================
+   FABLEJELLY ADDON — GRAIN
+   35mm ambience: a whisper of film grain plus a soft vignette. The grain
+   layer already exists in the core (dormant); this just turns it up.
+   Automatically suppressed during video playback and over dialogs.
+   Designed for the dark presets.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/addons/grain.css");
+   ========================================================================== */
+
+:root {
+    --fj-grain-opacity: 0.05;
+}
+
+/* Vignette — painted on the background layer so UI stays crisp */
+.backgroundContainer {
+    box-shadow: inset 0 0 24vmax rgba(0, 0, 0, 0.45);
+}

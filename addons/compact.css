@@ -1,0 +1,39 @@
+/* ============================================================================
+   FABLEJELLY ADDON — COMPACT
+   Denser chrome for small screens, big libraries and people who scroll fast.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/addons/compact.css");
+   ========================================================================== */
+
+:root {
+    --fj-radius: 12px;
+    --fj-radius-lg: 16px;
+    --fj-card-lift: -3px;
+}
+
+.headerTop {
+    padding: 0.2em 0.7em;
+}
+
+.navMenuOption {
+    margin: 1px 8px;
+    padding-top: 0.42em;
+    padding-bottom: 0.42em;
+}
+
+.verticalSection .sectionTitle {
+    font-size: 1.12em;
+}
+
+.emby-tab-button {
+    padding: 0.4em 0.85em;
+}
+
+.listItem {
+    padding-top: 0.15em;
+    padding-bottom: 0.15em;
+}
+
+.videoOsdBottom .osdControls {
+    padding: 0.55em 0.9em 0.45em;
+}

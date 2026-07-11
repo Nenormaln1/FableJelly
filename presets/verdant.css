@@ -1,0 +1,24 @@
+/* ============================================================================
+   FABLEJELLY PRESET — VERDANT
+   Emerald → lime on moss-black.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/verdant.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 8, 13, 10;
+    --fj-bg-elevated: 13, 20, 16;
+    --fj-surface: 19, 28, 22;
+    --fj-surface-2: 27, 40, 32;
+    --fj-line: 150, 190, 165;
+
+    --fj-ink: 236, 246, 240;
+    --fj-ink-dim: 168, 192, 178;
+    --fj-ink-faint: 112, 136, 122;
+
+    --fj-accent: 74, 222, 128;
+    --fj-accent-2: 190, 242, 100;
+    --fj-on-accent: 8, 22, 13;
+
+    --fj-glass: 11, 16, 13;
+}

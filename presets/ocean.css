@@ -1,0 +1,24 @@
+/* ============================================================================
+   FABLEJELLY PRESET — OCEAN
+   Azure → mint over abyssal blue-black.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/presets/ocean.css");
+   ========================================================================== */
+
+:root {
+    --fj-bg: 6, 11, 18;
+    --fj-bg-elevated: 11, 18, 28;
+    --fj-surface: 16, 25, 38;
+    --fj-surface-2: 24, 36, 54;
+    --fj-line: 140, 170, 205;
+
+    --fj-ink: 233, 241, 250;
+    --fj-ink-dim: 158, 178, 200;
+    --fj-ink-faint: 104, 124, 148;
+
+    --fj-accent: 86, 164, 255;
+    --fj-accent-2: 84, 230, 188;
+    --fj-on-accent: 7, 16, 28;
+
+    --fj-glass: 9, 14, 23;
+}

@@ -1,0 +1,15 @@
+/* ============================================================================
+   FABLEJELLY ADDON — SQUARE
+   Tightens every radius for a sharper, editorial cut. Pills become
+   rounded rectangles.
+   ----------------------------------------------------------------------------
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/addons/square.css");
+   ========================================================================== */
+
+:root {
+    --fj-radius-xs: 3px;
+    --fj-radius-sm: 4px;
+    --fj-radius: 6px;
+    --fj-radius-lg: 8px;
+    --fj-radius-pill: 6px;
+}

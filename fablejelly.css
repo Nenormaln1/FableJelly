@@ -1,0 +1,2167 @@
+/* ============================================================================
+   FABLEJELLY — a cinematic, fully-customisable theme for Jellyfin
+   ----------------------------------------------------------------------------
+   Repo     : https://github.com/Nenormaln1/FableJelly
+   License  : MIT
+   Targets  : Jellyfin Web 10.9 / 10.10 / 10.11
+   ----------------------------------------------------------------------------
+   Install (Dashboard → General → Custom CSS):
+
+     @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fablejelly.css");
+
+   Everything is driven by the design tokens in section 02. Override any token
+   AFTER the import, or add a preset/addon import — see docs/CUSTOMIZATION.md.
+   ----------------------------------------------------------------------------
+   TABLE OF CONTENTS
+     01  Fonts & icons
+     02  Design tokens (:root)
+     03  Canvas — background, aurora ambience, scrollbars, selection, focus
+     04  Typography
+     05  Header & navigation
+     06  Drawer (sidebar)
+     07  Tabs
+     08  Home — library tiles & sections
+     09  Cards
+     10  Lists
+     11  Buttons
+     12  Forms — inputs, selects, checkboxes, switches, sliders
+     13  Item detail page
+     14  Dialogs, menus & toasts
+     15  Video player OSD
+     16  Now-playing bar (music)
+     17  Login page
+     18  Search
+     19  Dashboard & settings
+     20  Odds & ends
+     21  Plugin — Media Bar (MakD + forks)
+     22  Plugin — Jellyfin Enhanced (quality tags, Seerr, banners)
+     23  Plugin — skip buttons & generic plugin auto-fit
+     24  Responsive — mobile & touch
+     25  Responsive — TV & focus navigation
+     26  Motion & accessibility preferences
+   ========================================================================== */
+
+
+/* ============================================================================
+   01  FONTS & ICONS
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Figtree:ital,wght@0,300..800;1,300..700&display=swap");
+
+/* Rounded icon glyphs — same ligature names as stock Material Icons, so this
+   swap is loss-free. If the font fails to load we fall back to the stock set. */
+@font-face {
+    font-family: "Material Icons Round FJ";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons-round.woff2") format("woff2");
+}
+
+.material-icons {
+    font-family: "Material Icons Round FJ", "Material Icons" !important;
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: "liga";
+    -webkit-font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+
+/* ============================================================================
+   02  DESIGN TOKENS
+   ----------------------------------------------------------------------------
+   Colour tokens are raw "R, G, B" triplets so the theme can compose alpha
+   variants: rgba(var(--fj-accent), .25). Override any of these after the
+   import — presets are nothing more than a block of these overrides.
+   ========================================================================== */
+
+:root {
+    /* ── Canvas ─────────────────────────────────────────────────────────── */
+    --fj-bg: 9, 10, 16;                 /* page background — deep ink        */
+    --fj-bg-elevated: 15, 17, 26;       /* raised panels                     */
+    --fj-surface: 21, 24, 36;           /* cards, inputs, menus              */
+    --fj-surface-2: 30, 34, 50;         /* hovered / active surface          */
+    --fj-line: 148, 158, 190;           /* hairlines (used at low alpha)     */
+
+    /* ── Ink (text) ─────────────────────────────────────────────────────── */
+    --fj-ink: 236, 239, 248;            /* primary text                      */
+    --fj-ink-dim: 165, 172, 195;        /* secondary text                    */
+    --fj-ink-faint: 110, 117, 140;      /* tertiary / placeholder            */
+
+    /* ── Accent duo — the FableJelly signature gradient ─────────────────── */
+    --fj-accent: 139, 125, 255;         /* iris                              */
+    --fj-accent-2: 255, 156, 110;       /* ember peach                       */
+    --fj-on-accent: 16, 13, 30;         /* text placed on accent surfaces    */
+    --fj-gradient-angle: 118deg;
+    --fj-gradient: linear-gradient(var(--fj-gradient-angle),
+                       rgb(var(--fj-accent)) 0%,
+                       rgb(var(--fj-accent-2)) 100%);
+
+    /* ── Signals ────────────────────────────────────────────────────────── */
+    --fj-ok: 74, 222, 154;
+    --fj-warn: 255, 199, 89;
+    --fj-danger: 255, 105, 125;
+
+    /* ── Glass ──────────────────────────────────────────────────────────── */
+    --fj-glass: 13, 15, 24;             /* glass tint                        */
+    --fj-glass-alpha: 0.62;
+    --fj-glass-blur: 22px;
+    --fj-glass-border: rgba(var(--fj-line), 0.14);
+
+    /* ── Shape ──────────────────────────────────────────────────────────── */
+    --fj-radius-xs: 8px;
+    --fj-radius-sm: 12px;
+    --fj-radius: 16px;                  /* cards                             */
+    --fj-radius-lg: 24px;               /* dialogs, hero surfaces            */
+    --fj-radius-pill: 999px;
+
+    /* ── Type ───────────────────────────────────────────────────────────── */
+    --fj-font-display: "Sora", "Figtree", -apple-system, system-ui, sans-serif;
+    --fj-font-body: "Figtree", -apple-system, system-ui, "Segoe UI", sans-serif;
+
+    /* ── Motion ─────────────────────────────────────────────────────────── */
+    --fj-t-fast: 140ms;
+    --fj-t: 260ms;
+    --fj-t-slow: 480ms;
+    --fj-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fj-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ── Ambience (aurora background) ───────────────────────────────────── */
+    --fj-aurora-opacity: 0.5;           /* 0 disables the aurora entirely    */
+    --fj-aurora-drift: 90s;             /* one drift cycle                   */
+
+    /* ── Cards ──────────────────────────────────────────────────────────── */
+    --fj-card-lift: -6px;               /* hover rise                        */
+    --fj-card-zoom: 1.05;               /* hover art zoom                    */
+    --fj-glow-alpha: 0.30;              /* hover glow strength               */
+
+    /* ── Film grain (0 = off; the grain addon raises it) ────────────────── */
+    --fj-grain-opacity: 0;
+}
+
+
+/* ============================================================================
+   03  CANVAS
+   ========================================================================== */
+
+html {
+    background-color: rgb(var(--fj-bg));
+}
+
+body {
+    background-color: rgb(var(--fj-bg));
+    font-family: var(--fj-font-body);
+    overscroll-behavior-y: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+.backgroundContainer {
+    background: rgb(var(--fj-bg)) !important;
+    overflow: hidden;
+}
+
+/* Aurora ambience — two soft colour fields adrift behind everything.
+   Pure gradients (no filter blur) keep this almost free to composite. */
+.backgroundContainer::before,
+.backgroundContainer::after {
+    content: "";
+    position: fixed;
+    width: 110vmax;
+    height: 110vmax;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: var(--fj-aurora-opacity);
+    will-change: transform;
+}
+
+.backgroundContainer::before {
+    top: -55vmax;
+    left: -30vmax;
+    background: radial-gradient(circle at center,
+        rgba(var(--fj-accent), 0.16) 0%,
+        rgba(var(--fj-accent), 0.05) 38%,
+        transparent 62%);
+    animation: fj-aurora-a var(--fj-aurora-drift) ease-in-out infinite alternate;
+}
+
+.backgroundContainer::after {
+    bottom: -60vmax;
+    right: -35vmax;
+    background: radial-gradient(circle at center,
+        rgba(var(--fj-accent-2), 0.12) 0%,
+        rgba(var(--fj-accent-2), 0.04) 36%,
+        transparent 60%);
+    animation: fj-aurora-b calc(var(--fj-aurora-drift) * 1.3) ease-in-out infinite alternate;
+}
+
+@keyframes fj-aurora-a {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to   { transform: translate3d(12vmax, 8vmax, 0) scale(1.15); }
+}
+
+@keyframes fj-aurora-b {
+    from { transform: translate3d(0, 0, 0) scale(1.1); }
+    to   { transform: translate3d(-10vmax, -7vmax, 0) scale(0.95); }
+}
+
+/* Backdrop images (library/detail ambience) get a gentle ink wash */
+.backdropContainer {
+    filter: saturate(1.05);
+}
+
+.backdropImage {
+    opacity: 0.5;
+}
+
+/* Film grain — dormant until the grain addon sets --fj-grain-opacity > 0 */
+body::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: var(--fj-grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    background-size: 220px 220px;
+}
+
+/* Never let grain sit over video playback or dialogs */
+body:has(#videoOsdPage:not(.hide))::after,
+body:has(.dialogContainer)::after {
+    display: none;
+}
+
+/* Scrollbars — hairline, accent on hover */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--fj-ink-faint), 0.55) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track-piece,
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--fj-ink-faint), 0.55);
+    border-radius: var(--fj-radius-pill);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--fj-accent));
+    background-clip: padding-box;
+}
+
+/* Selection & focus */
+::selection {
+    background: rgba(var(--fj-accent), 0.4);
+    color: rgb(var(--fj-ink));
+}
+
+:focus-visible {
+    outline: 2px solid rgba(var(--fj-accent), 0.85);
+    outline-offset: 2px;
+    border-radius: var(--fj-radius-xs);
+}
+
+
+/* ============================================================================
+   04  TYPOGRAPHY
+   ========================================================================== */
+
+h1, h2, h3,
+.pageTitle,
+.sectionTitle,
+.formDialogHeaderTitle,
+.actionSheetTitle,
+.itemName,
+.osdTitle,
+.headerSelectedPlayer,
+.upNextDialog-title {
+    font-family: var(--fj-font-display);
+    letter-spacing: -0.015em;
+}
+
+.pageTitle {
+    font-weight: 700;
+}
+
+/* Section headings — display face with a gradient index tick */
+.verticalSection .sectionTitle {
+    font-size: 1.34em;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+}
+
+.verticalSection > .sectionTitleContainer .sectionTitle::before,
+.verticalSection > .sectionTitle::before {
+    content: "";
+    width: 0.42em;
+    height: 0.42em;
+    margin-right: 0.55em;
+    border-radius: 0.14em;
+    background: var(--fj-gradient);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+.sectionTitleTextButton {
+    color: rgb(var(--fj-ink)) !important;
+    transition: color var(--fj-t) var(--fj-ease),
+                transform var(--fj-t) var(--fj-ease);
+}
+
+.sectionTitleTextButton:hover {
+    color: rgb(var(--fj-accent)) !important;
+    transform: translateX(2px);
+}
+
+.sectionTitleTextButton .material-icons {
+    transition: transform var(--fj-t) var(--fj-ease-spring);
+}
+
+.sectionTitleTextButton:hover .material-icons {
+    transform: translateX(3px);
+}
+
+.fieldDescription,
+.secondaryText,
+.listItemBodyText.secondary,
+.cardText-secondary {
+    color: rgb(var(--fj-ink-faint)) !important;
+}
+
+
+/* ============================================================================
+   05  HEADER & NAVIGATION
+   ----------------------------------------------------------------------------
+   The header becomes a progressive glass veil: a blur that dissolves
+   downwards instead of ending at a hard edge.
+   ========================================================================== */
+
+.skinHeader {
+    background: transparent !important;
+    color: rgb(var(--fj-ink));
+    contain: layout;
+}
+
+.skinHeader::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 -46%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+        rgba(var(--fj-bg), 0.88) 0%,
+        rgba(var(--fj-bg), 0.55) 55%,
+        transparent 100%);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    -webkit-mask-image: linear-gradient(to bottom, black 52%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 52%, transparent 100%);
+}
+
+.skinHeader-withBackground,
+.skinHeader.semiTransparent {
+    background: transparent !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+.headerTop {
+    padding: 0.45em 0.9em;
+}
+
+.headerButton,
+.paper-icon-button-light.headerButton {
+    color: rgba(var(--fj-ink), 0.86);
+    border-radius: var(--fj-radius-pill);
+    transition: background-color var(--fj-t-fast) var(--fj-ease),
+                color var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease);
+}
+
+.headerButton:hover {
+    background: rgba(var(--fj-ink), 0.09);
+    color: rgb(var(--fj-ink));
+}
+
+
+/* ============================================================================
+   06  DRAWER (SIDEBAR)
+   ========================================================================== */
+
+.mainDrawer {
+    background: rgba(var(--fj-glass), 0.72) !important;
+    -webkit-backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    border-right: 1px solid var(--fj-glass-border);
+    box-shadow: 24px 0 80px -32px rgba(0, 0, 0, 0.55);
+}
+
+.mainDrawer .sidebarHeader {
+    font-family: var(--fj-font-display);
+    font-size: 0.74em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgb(var(--fj-ink-faint));
+}
+
+.navMenuOption {
+    margin: 2px 10px;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+    border-radius: var(--fj-radius-sm);
+    color: rgb(var(--fj-ink-dim)) !important;
+    position: relative;
+    transition: background-color var(--fj-t-fast) var(--fj-ease),
+                color var(--fj-t-fast) var(--fj-ease);
+}
+
+.navMenuOption:hover {
+    background: rgba(var(--fj-ink), 0.06) !important;
+    color: rgb(var(--fj-ink)) !important;
+}
+
+.navMenuOption-selected {
+    background: linear-gradient(var(--fj-gradient-angle),
+        rgba(var(--fj-accent), 0.18),
+        rgba(var(--fj-accent-2), 0.10)) !important;
+    color: rgb(var(--fj-ink)) !important;
+}
+
+.navMenuOption-selected::before {
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 22%;
+    bottom: 22%;
+    width: 3px;
+    border-radius: var(--fj-radius-pill);
+    background: var(--fj-gradient);
+}
+
+.navMenuOption-selected .navMenuOptionIcon {
+    color: rgb(var(--fj-accent)) !important;
+}
+
+.navMenuDivider {
+    background: rgba(var(--fj-line), 0.10);
+    height: 1px;
+}
+
+
+/* ============================================================================
+   07  TABS
+   ========================================================================== */
+
+.headerTabs,
+.sectionTabs {
+    background: transparent;
+}
+
+.emby-tab-button {
+    font-family: var(--fj-font-body);
+    font-weight: 600;
+    color: rgb(var(--fj-ink-faint));
+    border-radius: var(--fj-radius-pill);
+    padding: 0.55em 1.1em;
+    margin: 0 0.1em;
+    border-bottom: none !important;
+    transition: color var(--fj-t-fast) var(--fj-ease),
+                background-color var(--fj-t-fast) var(--fj-ease);
+}
+
+.emby-tab-button:hover {
+    color: rgb(var(--fj-ink-dim));
+}
+
+.emby-tab-button-active,
+.emby-tab-button-active:hover {
+    color: rgb(var(--fj-ink)) !important;
+    background: linear-gradient(var(--fj-gradient-angle),
+        rgba(var(--fj-accent), 0.20),
+        rgba(var(--fj-accent-2), 0.12));
+}
+
+
+/* ============================================================================
+   08  HOME — LIBRARY TILES & SECTIONS
+   ========================================================================== */
+
+.homeLibraryButton {
+    border-radius: var(--fj-radius) !important;
+    overflow: hidden;
+    box-shadow: 0 6px 24px -12px rgba(0, 0, 0, 0.6);
+    transition: transform var(--fj-t) var(--fj-ease-spring),
+                box-shadow var(--fj-t) var(--fj-ease);
+}
+
+.homeLibraryButton:hover {
+    transform: translateY(var(--fj-card-lift));
+    box-shadow: 0 18px 44px -16px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(var(--fj-accent), 0.35),
+                0 8px 40px -8px rgba(var(--fj-accent), var(--fj-glow-alpha));
+}
+
+/* Gentle staggered entrance for home rows */
+.homeSectionsContainer > .verticalSection {
+    animation: fj-rise var(--fj-t-slow) var(--fj-ease) backwards;
+}
+
+.homeSectionsContainer > .verticalSection:nth-child(1) { animation-delay: 40ms; }
+.homeSectionsContainer > .verticalSection:nth-child(2) { animation-delay: 90ms; }
+.homeSectionsContainer > .verticalSection:nth-child(3) { animation-delay: 140ms; }
+.homeSectionsContainer > .verticalSection:nth-child(4) { animation-delay: 190ms; }
+.homeSectionsContainer > .verticalSection:nth-child(5) { animation-delay: 240ms; }
+.homeSectionsContainer > .verticalSection:nth-child(6) { animation-delay: 290ms; }
+
+@keyframes fj-rise {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ============================================================================
+   09  CARDS
+   ----------------------------------------------------------------------------
+   The FableJelly card: continuous-rounded art, a quiet resting state, and a
+   hover that lifts the card, zooms the art and ignites a gradient ring.
+   ========================================================================== */
+
+.card {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.cardBox {
+    background: transparent;
+    border-radius: var(--fj-radius);
+}
+
+.cardScalable {
+    border-radius: var(--fj-radius);
+    background: rgb(var(--fj-surface));
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform var(--fj-t) var(--fj-ease-spring),
+                box-shadow var(--fj-t) var(--fj-ease);
+    box-shadow: 0 2px 14px -8px rgba(0, 0, 0, 0.5);
+}
+
+.cardImageContainer,
+.cardImage,
+.chapterCardImageContainer,
+.blurhash-canvas {
+    border-radius: inherit;
+}
+
+.cardContent {
+    border-radius: inherit;
+    overflow: hidden;
+}
+
+.cardImageContainer {
+    transition: transform var(--fj-t-slow) var(--fj-ease),
+                filter var(--fj-t-slow) var(--fj-ease);
+}
+
+/* Gradient ring — painted by a pseudo-element so it never shifts layout */
+.cardScalable::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(var(--fj-gradient-angle),
+        rgba(var(--fj-accent), 0.9),
+        rgba(var(--fj-accent-2), 0.9));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--fj-t) var(--fj-ease);
+    pointer-events: none;
+}
+
+@media (hover: hover) {
+    .card:hover .cardScalable {
+        transform: translateY(var(--fj-card-lift));
+        box-shadow: 0 22px 48px -18px rgba(0, 0, 0, 0.75),
+                    0 10px 48px -10px rgba(var(--fj-accent), var(--fj-glow-alpha));
+    }
+
+    .card:hover .cardScalable::after {
+        opacity: 1;
+    }
+
+    .card:hover .cardImageContainer {
+        transform: scale(var(--fj-card-zoom));
+        filter: brightness(1.06) saturate(1.06);
+    }
+}
+
+/* Hover overlay — ink veil instead of flat black */
+.cardOverlayContainer {
+    background: linear-gradient(to top,
+        rgba(var(--fj-bg), 0.88) 0%,
+        rgba(var(--fj-bg), 0.35) 55%,
+        rgba(var(--fj-bg), 0.15) 100%) !important;
+    border-radius: inherit;
+    transition: opacity var(--fj-t) var(--fj-ease);
+}
+
+.cardOverlayButton {
+    background: rgba(var(--fj-surface-2), 0.72);
+    color: rgb(var(--fj-ink));
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-radius: var(--fj-radius-pill);
+    transition: background-color var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease-spring);
+}
+
+.cardOverlayButton:hover {
+    background: rgba(var(--fj-surface-2), 0.95);
+    transform: scale(1.1);
+}
+
+.cardOverlayFab-primary {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    box-shadow: 0 6px 24px -6px rgba(var(--fj-accent), 0.6);
+    transition: transform var(--fj-t-fast) var(--fj-ease-spring),
+                box-shadow var(--fj-t-fast) var(--fj-ease);
+}
+
+.cardOverlayFab-primary:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 32px -6px rgba(var(--fj-accent), 0.75);
+}
+
+/* Card captions */
+.cardText {
+    font-weight: 600;
+    color: rgb(var(--fj-ink));
+    letter-spacing: 0.005em;
+}
+
+.cardText-secondary {
+    font-weight: 500;
+}
+
+/* Footer overlaid on the artwork (folders, photos…) */
+.innerCardFooter {
+    background: linear-gradient(to top,
+        rgba(var(--fj-bg), 0.92), rgba(var(--fj-bg), 0.55) 70%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-radius: 0 0 var(--fj-radius) var(--fj-radius);
+}
+
+/* Indicators */
+.playedIndicator,
+.countIndicator {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    font-weight: 700;
+    box-shadow: 0 2px 10px -2px rgba(var(--fj-accent), 0.55);
+    border: none;
+}
+
+.unairedIndicator {
+    background: rgba(var(--fj-warn), 0.92) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border-radius: var(--fj-radius-pill);
+    font-weight: 700;
+}
+
+.missingIndicator {
+    background: rgba(var(--fj-danger), 0.92) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border-radius: var(--fj-radius-pill);
+    font-weight: 700;
+}
+
+/* Watch progress — gradient stream on a glass track */
+.itemProgressBar {
+    background: rgba(var(--fj-ink), 0.16) !important;
+    border-radius: var(--fj-radius-pill);
+    overflow: hidden;
+    height: 5px;
+}
+
+.itemProgressBarForeground {
+    background: var(--fj-gradient) !important;
+    border-radius: var(--fj-radius-pill);
+    box-shadow: 0 0 12px rgba(var(--fj-accent), 0.55);
+}
+
+.transcodingProgress {
+    background: rgba(var(--fj-warn), 0.85) !important;
+}
+
+
+/* ============================================================================
+   10  LISTS
+   ========================================================================== */
+
+.listItem {
+    border-radius: var(--fj-radius-sm);
+    transition: background-color var(--fj-t-fast) var(--fj-ease);
+}
+
+.listItem:hover {
+    background: rgba(var(--fj-ink), 0.05);
+}
+
+.listItem-border {
+    border-color: rgba(var(--fj-line), 0.08) !important;
+}
+
+.listItemImage,
+.listItemImageContainer {
+    border-radius: var(--fj-radius-xs);
+    overflow: hidden;
+}
+
+.listItemBodyText {
+    color: rgb(var(--fj-ink));
+}
+
+.listItemIcon {
+    color: rgb(var(--fj-accent));
+}
+
+.listItemImageButton {
+    color: rgba(var(--fj-ink), 0.9) !important;
+}
+
+
+/* ============================================================================
+   11  BUTTONS
+   ========================================================================== */
+
+.emby-button {
+    font-family: var(--fj-font-body);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    border-radius: var(--fj-radius-pill);
+    transition: background-color var(--fj-t-fast) var(--fj-ease),
+                color var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease-spring),
+                box-shadow var(--fj-t-fast) var(--fj-ease);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.emby-button.raised,
+.raised {
+    background: rgba(var(--fj-surface-2), 0.85);
+    color: rgb(var(--fj-ink));
+    border: 1px solid rgba(var(--fj-line), 0.10);
+    box-shadow: none;
+}
+
+.emby-button.raised:hover,
+.raised:hover {
+    background: rgb(var(--fj-surface-2));
+    transform: translateY(-1px);
+}
+
+/* Primary / submit — the gradient carries the brand */
+.emby-button.raised.button-submit,
+.button-submit {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border: none;
+    box-shadow: 0 6px 22px -8px rgba(var(--fj-accent), 0.65);
+}
+
+.emby-button.raised.button-submit:hover,
+.button-submit:hover {
+    box-shadow: 0 10px 30px -8px rgba(var(--fj-accent), 0.8);
+    transform: translateY(-1px);
+    filter: brightness(1.06);
+}
+
+.emby-button.raised.button-delete,
+.btnDelete {
+    background: rgba(var(--fj-danger), 0.16) !important;
+    color: rgb(var(--fj-danger)) !important;
+    border: 1px solid rgba(var(--fj-danger), 0.35);
+}
+
+.fab {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    box-shadow: 0 8px 28px -8px rgba(var(--fj-accent), 0.7);
+}
+
+.paper-icon-button-light {
+    border-radius: var(--fj-radius-pill);
+    color: rgba(var(--fj-ink), 0.82);
+    transition: background-color var(--fj-t-fast) var(--fj-ease),
+                color var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease-spring);
+}
+
+.paper-icon-button-light:hover {
+    background: rgba(var(--fj-ink), 0.08);
+    color: rgb(var(--fj-ink));
+}
+
+.paper-icon-button-light.show-focus:focus {
+    transform: scale(1.12);
+}
+
+.button-link {
+    color: rgb(var(--fj-accent)) !important;
+}
+
+.button-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Favourite / rating states */
+.ratingbutton-icon-withrating,
+.btnUserRating .material-icons.favorite {
+    color: rgb(var(--fj-accent-2)) !important;
+}
+
+/* Horizontal scroller chevrons */
+.emby-scrollbuttons {
+    background: transparent;
+}
+
+.emby-scrollbuttons-button {
+    background: rgba(var(--fj-surface-2), 0.8);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-radius: var(--fj-radius-pill);
+    color: rgb(var(--fj-ink));
+    border: 1px solid rgba(var(--fj-line), 0.12);
+    transition: background-color var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease-spring);
+}
+
+.emby-scrollbuttons-button:hover {
+    background: rgb(var(--fj-surface-2));
+    transform: scale(1.08);
+}
+
+
+/* ============================================================================
+   12  FORMS
+   ========================================================================== */
+
+.emby-input,
+.emby-textarea {
+    background: rgba(var(--fj-surface), 0.9) !important;
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.14) !important;
+    border-radius: var(--fj-radius-sm) !important;
+    padding: 0.72em 1em;
+    transition: border-color var(--fj-t-fast) var(--fj-ease),
+                box-shadow var(--fj-t-fast) var(--fj-ease),
+                background-color var(--fj-t-fast) var(--fj-ease);
+}
+
+.emby-input::placeholder,
+.emby-textarea::placeholder {
+    color: rgb(var(--fj-ink-faint));
+}
+
+.emby-input:focus,
+.emby-textarea:focus {
+    border-color: rgba(var(--fj-accent), 0.75) !important;
+    box-shadow: 0 0 0 3px rgba(var(--fj-accent), 0.18);
+    background: rgb(var(--fj-surface)) !important;
+    outline: none;
+}
+
+.inputLabel,
+.selectLabel,
+.textareaLabel {
+    color: rgb(var(--fj-ink-dim));
+    font-weight: 500;
+}
+
+.inputLabelFocused,
+.selectLabelFocused,
+.textareaLabelFocused {
+    color: rgb(var(--fj-accent)) !important;
+}
+
+/* Selects */
+.emby-select,
+.emby-select-withcolor {
+    background: rgba(var(--fj-surface), 0.9) !important;
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.14) !important;
+    border-radius: var(--fj-radius-sm) !important;
+    transition: border-color var(--fj-t-fast) var(--fj-ease),
+                box-shadow var(--fj-t-fast) var(--fj-ease);
+}
+
+.emby-select:focus,
+.emby-select-withcolor:focus {
+    border-color: rgba(var(--fj-accent), 0.75) !important;
+    box-shadow: 0 0 0 3px rgba(var(--fj-accent), 0.18);
+}
+
+.emby-select option {
+    background: rgb(var(--fj-bg-elevated));
+    color: rgb(var(--fj-ink));
+}
+
+.selectArrow {
+    color: rgb(var(--fj-ink-faint)) !important;
+}
+
+/* Checkboxes */
+.checkboxOutline {
+    border: 2px solid rgba(var(--fj-line), 0.35) !important;
+    border-radius: 7px !important;
+    background: transparent;
+    transition: background var(--fj-t-fast) var(--fj-ease),
+                border-color var(--fj-t-fast) var(--fj-ease);
+}
+
+input[type="checkbox"]:checked + .checkboxOutline,
+input[type="checkbox"]:checked ~ .checkboxOutline {
+    background: var(--fj-gradient) !important;
+    border-color: transparent !important;
+}
+
+.checkboxIcon {
+    color: rgb(var(--fj-on-accent)) !important;
+}
+
+input[type="checkbox"]:focus-visible + .checkboxOutline,
+input[type="checkbox"]:focus-visible ~ .checkboxOutline {
+    outline: 2px solid rgba(var(--fj-accent), 0.6);
+    outline-offset: 2px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: rgb(var(--fj-accent));
+}
+
+/* Switches (MDL) */
+.mdl-switch__track {
+    background: rgba(var(--fj-ink), 0.18) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+.mdl-switch__thumb {
+    background: rgb(var(--fj-ink-dim)) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.mdl-switch__input:checked + .mdl-switch__label + .mdl-switch__trackContainer > .mdl-switch__track {
+    background: linear-gradient(var(--fj-gradient-angle),
+        rgba(var(--fj-accent), 0.55),
+        rgba(var(--fj-accent-2), 0.55)) !important;
+}
+
+.mdl-switch__input:checked + .mdl-switch__label + .mdl-switch__trackContainer > .mdl-switch__thumb {
+    background: rgb(var(--fj-ink)) !important;
+}
+
+/* Sliders (settings + player share these) */
+.mdl-slider-background-lower {
+    background: var(--fj-gradient) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+.mdl-slider-background-upper {
+    background: rgba(var(--fj-ink), 0.16) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+.mdl-slider::-webkit-slider-thumb {
+    background: rgb(var(--fj-ink)) !important;
+    box-shadow: 0 0 0 4px rgba(var(--fj-accent), 0.25);
+}
+
+.mdl-slider::-moz-range-thumb {
+    background: rgb(var(--fj-ink)) !important;
+    box-shadow: 0 0 0 4px rgba(var(--fj-accent), 0.25);
+}
+
+.mdl-slider-hoverthumb {
+    background: rgb(var(--fj-ink)) !important;
+}
+
+.sliderBubble {
+    background: rgba(var(--fj-glass), 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--fj-glass-border);
+    border-radius: var(--fj-radius-sm);
+    color: rgb(var(--fj-ink));
+    font-weight: 600;
+}
+
+.sliderMarker {
+    background: rgba(var(--fj-ink), 0.5) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+fieldset,
+.paperCheckboxFieldsetLabel {
+    border: 1px solid rgba(var(--fj-line), 0.12);
+    border-radius: var(--fj-radius-sm);
+}
+
+
+/* ============================================================================
+   13  ITEM DETAIL PAGE
+   ========================================================================== */
+
+/* Backdrop melts into the canvas instead of ending at an edge */
+.itemBackdrop {
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 98%);
+    mask-image: linear-gradient(to bottom, black 55%, transparent 98%);
+}
+
+.itemBackdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+        rgba(var(--fj-bg), 0.55), transparent 55%);
+}
+
+.detailPagePrimaryContainer {
+    background: transparent !important;
+}
+
+.detailLogo {
+    filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.6));
+}
+
+.detailImageContainer .cardScalable,
+.detailImageContainer img {
+    border-radius: var(--fj-radius);
+    box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.8);
+}
+
+#itemDetailPage .itemName {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.parentName {
+    color: rgb(var(--fj-ink-dim));
+}
+
+/* Detail action row — glass chips, gradient primary */
+.mainDetailButtons .detailButton {
+    background: rgba(var(--fj-surface-2), 0.72);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(var(--fj-line), 0.12);
+    border-radius: var(--fj-radius-pill);
+    color: rgb(var(--fj-ink));
+    margin-right: 0.35em;
+    transition: background-color var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease-spring),
+                box-shadow var(--fj-t-fast) var(--fj-ease);
+}
+
+.mainDetailButtons .detailButton:hover {
+    background: rgb(var(--fj-surface-2));
+    transform: translateY(-2px);
+}
+
+.mainDetailButtons .btnPlay,
+.mainDetailButtons .detailButton.btnPlay {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border: none;
+    padding-left: 0.9em;
+    padding-right: 1.15em;
+    box-shadow: 0 8px 28px -8px rgba(var(--fj-accent), 0.7);
+}
+
+/* Give the icon-only play button its (localised) label back */
+.mainDetailButtons .btnPlay::after {
+    content: attr(title);
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-left: 0.35em;
+    white-space: nowrap;
+}
+
+.mainDetailButtons .btnPlay:hover {
+    box-shadow: 0 12px 36px -8px rgba(var(--fj-accent), 0.85);
+    transform: translateY(-2px) scale(1.03);
+}
+
+/* Metadata strip */
+.itemMiscInfo .mediaInfoItem,
+.mediaInfoItem {
+    color: rgb(var(--fj-ink-dim));
+}
+
+.mediaInfoOfficialRating {
+    border: 1px solid rgba(var(--fj-line), 0.35) !important;
+    border-radius: 6px;
+    padding: 0 0.5em;
+    color: rgb(var(--fj-ink-dim)) !important;
+    background: rgba(var(--fj-surface), 0.5);
+}
+
+.starIcon,
+.mediaInfoCriticRatingFresh {
+    color: rgb(var(--fj-warn)) !important;
+}
+
+.endsAt,
+.itemMiscInfo-secondary {
+    color: rgb(var(--fj-ink-faint));
+}
+
+.overview,
+.listItem-overview {
+    color: rgb(var(--fj-ink-dim));
+    line-height: 1.65;
+    max-width: 72ch;
+}
+
+.tagline {
+    color: rgb(var(--fj-accent-2));
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+/* Genre / link chips */
+.itemGenres a,
+.itemLinks a,
+.tag {
+    display: inline-block;
+    background: rgba(var(--fj-surface-2), 0.7);
+    border: 1px solid rgba(var(--fj-line), 0.12);
+    border-radius: var(--fj-radius-pill);
+    padding: 0.22em 0.85em;
+    margin: 0.15em 0.25em 0.15em 0;
+    color: rgb(var(--fj-ink-dim)) !important;
+    font-size: 0.92em;
+    font-weight: 500;
+    transition: border-color var(--fj-t-fast) var(--fj-ease),
+                color var(--fj-t-fast) var(--fj-ease),
+                background-color var(--fj-t-fast) var(--fj-ease);
+}
+
+.itemGenres a:hover,
+.itemLinks a:hover,
+.tag:hover {
+    border-color: rgba(var(--fj-accent), 0.6);
+    color: rgb(var(--fj-ink)) !important;
+    background: rgba(var(--fj-accent), 0.12);
+}
+
+/* Track / version selectors on detail pages */
+.trackSelections .selectContainer {
+    background: transparent;
+}
+
+
+/* ============================================================================
+   14  DIALOGS, MENUS & TOASTS
+   ========================================================================== */
+
+.dialogBackdrop {
+    background: rgba(4, 5, 10, 0.55);
+}
+
+.dialogBackdropOpened {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.dialog,
+.formDialog {
+    background: rgba(var(--fj-glass), 0.88) !important;
+    -webkit-backdrop-filter: blur(calc(var(--fj-glass-blur) + 8px)) saturate(1.4);
+    backdrop-filter: blur(calc(var(--fj-glass-blur) + 8px)) saturate(1.4);
+    border: 1px solid var(--fj-glass-border);
+    border-radius: var(--fj-radius-lg) !important;
+    box-shadow: 0 40px 120px -32px rgba(0, 0, 0, 0.85);
+    color: rgb(var(--fj-ink));
+}
+
+.dialog-fullscreen {
+    border-radius: 0 !important;
+    border: none;
+}
+
+.formDialogHeader {
+    background: transparent !important;
+    color: rgb(var(--fj-ink)) !important;
+    border-bottom: 1px solid rgba(var(--fj-line), 0.08);
+}
+
+.formDialogHeaderTitle {
+    font-weight: 700;
+}
+
+.formDialogFooter {
+    background: transparent !important;
+    border-top: 1px solid rgba(var(--fj-line), 0.08);
+}
+
+.formDialogFooterItem {
+    border-radius: var(--fj-radius-pill);
+}
+
+/* Action sheets (context menus) */
+.actionSheet {
+    background: rgba(var(--fj-glass), 0.9) !important;
+    -webkit-backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    border: 1px solid var(--fj-glass-border);
+    border-radius: var(--fj-radius) !important;
+    box-shadow: 0 24px 80px -24px rgba(0, 0, 0, 0.8);
+}
+
+.actionSheetMenuItem {
+    border-radius: var(--fj-radius-sm);
+    margin: 1px 6px;
+    transition: background-color var(--fj-t-fast) var(--fj-ease);
+}
+
+.actionSheetMenuItem:hover {
+    background: rgba(var(--fj-ink), 0.07) !important;
+}
+
+.actionsheetDivider {
+    background: rgba(var(--fj-line), 0.1);
+}
+
+.actionSheetTitle {
+    color: rgb(var(--fj-ink-faint));
+    font-weight: 600;
+}
+
+/* Toasts */
+.toast {
+    background: rgba(var(--fj-glass), 0.92) !important;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--fj-glass-border);
+    border-radius: var(--fj-radius-pill);
+    color: rgb(var(--fj-ink)) !important;
+    font-weight: 500;
+    box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.7);
+    animation: fj-toast-in var(--fj-t) var(--fj-ease-spring);
+}
+
+@keyframes fj-toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Up-next card */
+.upNextDialog {
+    background: rgba(var(--fj-glass), 0.9);
+    -webkit-backdrop-filter: blur(var(--fj-glass-blur));
+    backdrop-filter: blur(var(--fj-glass-blur));
+    border: 1px solid var(--fj-glass-border);
+    border-radius: var(--fj-radius-lg);
+    padding: 1.2em 1.4em;
+    box-shadow: 0 24px 80px -24px rgba(0, 0, 0, 0.8);
+}
+
+.upNextDialog-countdownText {
+    color: rgb(var(--fj-accent-2));
+    font-weight: 700;
+}
+
+/* Selection command bar (multi-select) */
+.selectionCommandsPanel {
+    background: rgba(var(--fj-glass), 0.92) !important;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fj-glass-border);
+}
+
+.itemSelectionPanel {
+    border: 2px solid rgba(var(--fj-accent), 0.8) !important;
+    border-radius: var(--fj-radius);
+}
+
+
+/* ============================================================================
+   15  VIDEO PLAYER OSD
+   ----------------------------------------------------------------------------
+   The control surface floats: a rounded glass island above the bottom edge
+   rather than a full-bleed gradient slab.
+   ========================================================================== */
+
+.videoOsdBottom {
+    background: transparent !important;
+    padding: 0 max(1.4vw, 12px) max(1.6vh, 12px);
+}
+
+.videoOsdBottom .osdControls {
+    background: rgba(var(--fj-glass), 0.72);
+    -webkit-backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.3);
+    backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.3);
+    border: 1px solid var(--fj-glass-border);
+    border-radius: var(--fj-radius-lg);
+    padding: 0.9em 1.3em 0.7em;
+    box-shadow: 0 24px 80px -20px rgba(0, 0, 0, 0.8);
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.osdTitle {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.osdMediaStatus,
+.osdSecondaryMediaInfo,
+.osdTimeText {
+    color: rgb(var(--fj-ink-dim));
+}
+
+.osdTimeText {
+    font-variant-numeric: tabular-nums;
+}
+
+.osdPoster {
+    border-radius: var(--fj-radius-sm);
+    box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.8);
+}
+
+.videoOsdBottom .paper-icon-button-light:hover {
+    background: rgba(var(--fj-ink), 0.1);
+}
+
+.videoOsdBottom .btnPause:hover,
+.videoOsdBottom .btnPlay:hover {
+    color: rgb(var(--fj-accent));
+}
+
+/* Chapter/scene markers inherit slider styling from section 12 */
+
+/* Loading spinner accent */
+.mdlSpinner,
+.docspinner {
+    --mdl-spinner-color: rgb(var(--fj-accent));
+}
+
+.mdl-spinner__layer-1,
+.mdl-spinner__layer-2,
+.mdl-spinner__layer-3,
+.mdl-spinner__layer-4 {
+    border-color: rgb(var(--fj-accent)) !important;
+}
+
+
+/* ============================================================================
+   16  NOW-PLAYING BAR (MUSIC)
+   ========================================================================== */
+
+.nowPlayingBar {
+    background: rgba(var(--fj-glass), 0.85) !important;
+    -webkit-backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    border-top: 1px solid var(--fj-glass-border);
+}
+
+.nowPlayingImage {
+    border-radius: var(--fj-radius-xs);
+    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.6);
+}
+
+.nowPlayingBarText {
+    color: rgb(var(--fj-ink));
+}
+
+.nowPlayingBarSecondaryText {
+    color: rgb(var(--fj-ink-faint));
+}
+
+
+/* ============================================================================
+   17  LOGIN PAGE
+   ========================================================================== */
+
+#loginPage .padded-left.padded-right.padded-bottom-page {
+    max-width: 34em;
+}
+
+#loginPage .readOnlyContent,
+#loginPage form {
+    background: rgba(var(--fj-glass), 0.66);
+    -webkit-backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    border: 1px solid var(--fj-glass-border);
+    border-radius: var(--fj-radius-lg);
+    padding: 2em 2em 1.6em;
+    box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.8);
+}
+
+#loginPage h1 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+#loginPage .btnForgotPassword,
+#loginPage .btnCancel {
+    color: rgb(var(--fj-ink-faint)) !important;
+    background: transparent !important;
+    box-shadow: none;
+}
+
+#loginPage .btnForgotPassword:hover {
+    color: rgb(var(--fj-accent)) !important;
+}
+
+/* “Who’s watching” user tiles */
+#loginPage .cardScalable {
+    border-radius: var(--fj-radius-lg);
+}
+
+#loginPage .cardText {
+    text-align: center;
+}
+
+
+/* ============================================================================
+   18  SEARCH
+   ========================================================================== */
+
+.searchFields {
+    padding-top: 1em;
+}
+
+.searchFieldsInner {
+    max-width: 46em;
+    background: rgba(var(--fj-surface), 0.9);
+    border: 1px solid rgba(var(--fj-line), 0.14);
+    border-radius: var(--fj-radius-pill);
+    padding: 0.15em 1.1em;
+    transition: border-color var(--fj-t-fast) var(--fj-ease),
+                box-shadow var(--fj-t-fast) var(--fj-ease);
+}
+
+.searchFieldsInner:focus-within {
+    border-color: rgba(var(--fj-accent), 0.7);
+    box-shadow: 0 0 0 4px rgba(var(--fj-accent), 0.15);
+}
+
+.searchFieldsInner .emby-input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 1.15em;
+}
+
+.searchfields-icon {
+    color: rgb(var(--fj-ink-faint));
+}
+
+.searchSuggestions {
+    background: transparent;
+}
+
+.searchSuggestionsList {
+    background: rgba(var(--fj-surface), 0.75);
+    border: 1px solid rgba(var(--fj-line), 0.1);
+    border-radius: var(--fj-radius);
+    padding: 0.4em;
+}
+
+
+/* ============================================================================
+   19  DASHBOARD & SETTINGS
+   ========================================================================== */
+
+.dashboardSection,
+.paperList,
+.visualCardBox {
+    background: rgba(var(--fj-surface), 0.66);
+    border: 1px solid rgba(var(--fj-line), 0.09);
+    border-radius: var(--fj-radius);
+    box-shadow: none;
+}
+
+.dashboardSection .sectionTitle {
+    font-size: 1.05em;
+}
+
+.taskProgressOuter {
+    background: rgba(var(--fj-ink), 0.14);
+    border-radius: var(--fj-radius-pill);
+}
+
+.taskProgressInner {
+    background: var(--fj-gradient) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+.sessionCardFooter {
+    border-top: 1px solid rgba(var(--fj-line), 0.08);
+}
+
+.activeSession .cardScalable {
+    background: rgb(var(--fj-surface));
+}
+
+/* Settings menus reuse listItem — already themed. Keep collapsibles clean. */
+.emby-collapse .collapseContent {
+    background: rgba(var(--fj-surface), 0.4);
+    border-radius: 0 0 var(--fj-radius-sm) var(--fj-radius-sm);
+}
+
+.subtitleappearance-preview {
+    border-radius: var(--fj-radius-sm);
+}
+
+
+/* ============================================================================
+   20  ODDS & ENDS
+   ========================================================================== */
+
+/* A-Z jump strip on library pages */
+.alphaPickerButton {
+    color: rgb(var(--fj-ink-faint));
+    border-radius: var(--fj-radius-xs);
+    transition: color var(--fj-t-fast) var(--fj-ease),
+                background-color var(--fj-t-fast) var(--fj-ease);
+}
+
+.alphaPickerButton:hover {
+    color: rgb(var(--fj-ink));
+    background: rgba(var(--fj-ink), 0.08);
+}
+
+.alphaPickerButton-selected {
+    color: rgb(var(--fj-accent)) !important;
+    font-weight: 700;
+}
+
+/* Filter / sort flyouts inherit .dialog. Chips inside filter menus: */
+.filterDialogContent .emby-checkbox-label {
+    border-radius: var(--fj-radius-sm);
+}
+
+/* Progress rings (sync etc.) */
+.progressring-spiner {
+    border-color: rgb(var(--fj-accent)) !important;
+}
+
+/* SyncPlay */
+.syncPlayIconCircle {
+    background: rgba(var(--fj-accent), 0.2) !important;
+    color: rgb(var(--fj-accent)) !important;
+}
+
+/* Guide (Live TV) — light touch */
+.guide-headerTimeslots,
+.guide-channelHeaderCell,
+.channelPrograms {
+    background: transparent !important;
+    border-color: rgba(var(--fj-line), 0.07) !important;
+}
+
+.programCell {
+    border-radius: var(--fj-radius-xs);
+    border-color: rgba(var(--fj-line), 0.07) !important;
+}
+
+.programCell:hover {
+    background: rgba(var(--fj-ink), 0.06) !important;
+}
+
+/* Photo/book/queue player containers pick up .dialog & button styling */
+
+/* Centered empty-state messages */
+.centerMessage,
+.noItemsMessage {
+    color: rgb(var(--fj-ink-faint));
+}
+
+
+/* ============================================================================
+   21  PLUGIN — MEDIA BAR  (MakD/Jellyfin-Media-Bar + compatible forks)
+   ----------------------------------------------------------------------------
+   The bar keeps its own geometry (we never fight the plugin's layout JS);
+   FableJelly reskins every visual atom so it reads as part of the theme:
+   typography, gradient play pill, glass chips, elongating progress dots.
+   ========================================================================== */
+
+/* Loading veil matches the canvas instead of flashing pure black */
+.bar-loading {
+    background-color: rgb(var(--fj-bg)) !important;
+}
+
+.bar-loading .progress-bar {
+    background: var(--fj-gradient) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+.bar-loading .unfilled-bar {
+    background: rgba(var(--fj-ink), 0.14) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+/* Text set in the theme's voice */
+#slides-container .plot-container,
+#slides-container .genre,
+#slides-container .misc-info,
+#slides-container .runTime,
+#slides-container .date,
+#slides-container .info-container {
+    font-family: var(--fj-font-body) !important;
+}
+
+#slides-container .plot {
+    color: rgb(var(--fj-ink-dim));
+    font-size: 1.02em;
+    line-height: 1.6;
+    text-align: left !important;
+    max-width: 58ch;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
+#slides-container .genre {
+    font-family: var(--fj-font-display) !important;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: rgb(var(--fj-ink-dim));
+}
+
+#slides-container .separator-icon {
+    color: rgb(var(--fj-accent-2)) !important;
+    font-size: 8px !important;
+}
+
+#slides-container .info-container {
+    color: rgb(var(--fj-ink));
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Age rating → glass chip (was a solid white block) */
+#slides-container .age-rating {
+    background: rgba(var(--fj-surface-2), 0.75) !important;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.2) !important;
+    border-radius: 6px !important;
+    font-weight: 600;
+}
+
+#slides-container .community-rating-star {
+    color: rgb(var(--fj-warn)) !important;
+}
+
+/* Title logo gets a cinematic drop shadow */
+#slides-container .logo {
+    filter: brightness(1.28) drop-shadow(0 8px 28px rgba(0, 0, 0, 0.55));
+}
+
+/* Buttons — gradient play pill, glass companions */
+#slides-container .play-button {
+    font-family: var(--fj-font-body) !important;
+    font-weight: 700 !important;
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border: none !important;
+    border-radius: var(--fj-radius-pill) !important;
+    padding: 10px 22px !important;
+    box-shadow: 0 8px 28px -8px rgba(var(--fj-accent), 0.7);
+    transition: transform var(--fj-t-fast) var(--fj-ease-spring),
+                box-shadow var(--fj-t-fast) var(--fj-ease),
+                filter var(--fj-t-fast) var(--fj-ease) !important;
+}
+
+#slides-container .play-button:hover {
+    opacity: 1 !important;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 36px -8px rgba(var(--fj-accent), 0.85);
+    filter: brightness(1.06);
+}
+
+#slides-container .detail-button,
+#slides-container .favorite-button {
+    background: rgba(var(--fj-surface-2), 0.72) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.16) !important;
+    transition: transform var(--fj-t-fast) var(--fj-ease-spring),
+                background-color var(--fj-t-fast) var(--fj-ease) !important;
+}
+
+#slides-container .detail-button:hover,
+#slides-container .favorite-button:hover {
+    opacity: 1 !important;
+    transform: scale(1.08);
+    background: rgb(var(--fj-surface-2)) !important;
+}
+
+#slides-container .favorite-button,
+#slides-container .favorite-button.favorited {
+    color: rgb(var(--fj-accent-2)) !important;
+}
+
+/* Slide dots become elongating progress pills */
+#slides-container ~ .dots-container .dot,
+.dots-container .dot {
+    width: 0.5em;
+    height: 0.5em;
+    background-color: rgba(var(--fj-ink), 0.35);
+    border-radius: var(--fj-radius-pill);
+    transition: width var(--fj-t) var(--fj-ease),
+                background var(--fj-t) var(--fj-ease),
+                transform var(--fj-t) var(--fj-ease);
+}
+
+.dots-container .dot.active {
+    transform: none !important;
+    width: 1.9em;
+    background: var(--fj-gradient) !important;
+    box-shadow: 0 0 14px rgba(var(--fj-accent), 0.5);
+}
+
+/* Nav arrows / pause / volume — quiet glass, awake on hover */
+#slides-container .arrow,
+#slides-container .pause-button,
+#slides-container .volume-toggle {
+    color: rgb(var(--fj-ink));
+    opacity: 0.35;
+    transition: opacity var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease-spring);
+}
+
+#slides-container .arrow {
+    width: 2.6em;
+    height: 2.6em;
+    border-radius: var(--fj-radius-pill);
+    background: rgba(var(--fj-surface-2), 0.55);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(var(--fj-line), 0.14);
+}
+
+#slides-container .arrow:hover,
+#slides-container .pause-button:hover,
+#slides-container .volume-toggle:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.08);
+}
+
+#slides-container .pause-button:hover,
+#slides-container .volume-toggle:hover {
+    transform: scale(1.08);
+}
+
+/* Seat the home sections comfortably below the bar */
+body:has(#slides-container) .homeSectionsContainer {
+    z-index: 6;
+}
+
+
+/* ============================================================================
+   22  PLUGIN — JELLYFIN ENHANCED  (n00bcodr/Jellyfin-Enhanced)
+   ========================================================================== */
+
+/* Quality tags — glass chips with a gradient keyline for resolution */
+.quality-overlay-container {
+    gap: 4px;
+}
+
+.quality-overlay-label {
+    background: rgba(var(--fj-glass), 0.78) !important;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.18) !important;
+    border-radius: var(--fj-radius-pill) !important;
+    font-family: var(--fj-font-body) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em;
+    text-shadow: none !important;
+}
+
+.quality-overlay-label.resolution {
+    border-color: rgba(var(--fj-accent), 0.55) !important;
+    color: rgb(var(--fj-accent)) !important;
+}
+
+.quality-overlay-label.video-format {
+    border-color: rgba(var(--fj-accent-2), 0.5) !important;
+    color: rgb(var(--fj-accent-2)) !important;
+}
+
+/* Seerr search integration — requests read as native FableJelly cards */
+.jellyseerr-card .cardScalable {
+    border: 1px dashed rgba(var(--fj-accent), 0.35);
+}
+
+.jellyseerr-request-button,
+.jellyseerr-button-request {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border: none !important;
+    border-radius: var(--fj-radius-pill) !important;
+    font-weight: 700;
+    transition: transform var(--fj-t-fast) var(--fj-ease-spring),
+                box-shadow var(--fj-t-fast) var(--fj-ease);
+}
+
+.jellyseerr-request-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -8px rgba(var(--fj-accent), 0.7);
+}
+
+.jellyseerr-button-pending {
+    background: rgba(var(--fj-warn), 0.18) !important;
+    color: rgb(var(--fj-warn)) !important;
+    border: 1px solid rgba(var(--fj-warn), 0.4) !important;
+    border-radius: var(--fj-radius-pill) !important;
+}
+
+.jellyseerr-button-error {
+    background: rgba(var(--fj-danger), 0.16) !important;
+    color: rgb(var(--fj-danger)) !important;
+    border: 1px solid rgba(var(--fj-danger), 0.4) !important;
+    border-radius: var(--fj-radius-pill) !important;
+}
+
+.jellyseerr-button-spinner {
+    color: rgb(var(--fj-accent)) !important;
+}
+
+/* Maintenance / announcement banner */
+#je-maintenance-banner {
+    background: rgba(var(--fj-warn), 0.14) !important;
+    color: rgb(var(--fj-warn)) !important;
+    border: 1px solid rgba(var(--fj-warn), 0.35) !important;
+    border-radius: var(--fj-radius-sm);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+
+/* ============================================================================
+   23  PLUGIN — SKIP BUTTONS & GENERIC AUTO-FIT
+   ----------------------------------------------------------------------------
+   Two layers of automatic compatibility:
+     1. Plugins that reuse Jellyfin primitives (emby-button, dialog, listItem,
+        cardBox, emby-input…) inherit the theme with zero extra work.
+     2. The defensive selectors below catch the common injected UI shapes:
+        skip buttons in the player and badge/tag overlays on cards.
+   ========================================================================== */
+
+/* Intro Skipper, Media Segments and lookalikes — every skip-ish button that
+   floats over video becomes a FableJelly glass pill. */
+#videoOsdPage button[class*="skip"],
+#videoOsdPage button[id*="skip"],
+#videoOsdPage button[class*="Skip"],
+.videoPlayerContainer ~ button[class*="skip"],
+button.skip-button,
+button#skipIntro,
+.btnSkipSegment {
+    background: rgba(var(--fj-glass), 0.82) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.22) !important;
+    border-radius: var(--fj-radius-pill) !important;
+    font-family: var(--fj-font-body) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em;
+    padding: 0.7em 1.5em !important;
+    box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.7);
+    transition: background var(--fj-t-fast) var(--fj-ease),
+                color var(--fj-t-fast) var(--fj-ease),
+                transform var(--fj-t-fast) var(--fj-ease-spring) !important;
+}
+
+#videoOsdPage button[class*="skip"]:hover,
+#videoOsdPage button[id*="skip"]:hover,
+#videoOsdPage button[class*="Skip"]:hover,
+button.skip-button:hover,
+button#skipIntro:hover,
+.btnSkipSegment:hover {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    transform: scale(1.05);
+    border-color: transparent !important;
+}
+
+/* Unknown badge/tag overlays injected onto card art by any plugin */
+.cardImageContainer > div[class*="tag"]:not(.cardText),
+.cardImageContainer > span[class*="badge"],
+.cardImageContainer > div[class*="badge"] {
+    background: rgba(var(--fj-glass), 0.78);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: rgb(var(--fj-ink));
+    border: 1px solid rgba(var(--fj-line), 0.18);
+    border-radius: var(--fj-radius-pill);
+    font-weight: 700;
+}
+
+/* Plugin settings pages are formDialog/paperList based — already themed. */
+
+
+/* ============================================================================
+   24  RESPONSIVE — MOBILE & TOUCH
+   ========================================================================== */
+
+@media (max-width: 800px) {
+    :root {
+        --fj-radius: 13px;
+        --fj-radius-lg: 18px;
+        --fj-glass-blur: 16px;
+    }
+
+    .verticalSection .sectionTitle {
+        font-size: 1.15em;
+    }
+
+    .videoOsdBottom {
+        padding: 0 8px 8px;
+    }
+
+    .videoOsdBottom .osdControls {
+        padding: 0.6em 0.9em 0.5em;
+        border-radius: var(--fj-radius);
+    }
+
+    #loginPage .readOnlyContent,
+    #loginPage form {
+        padding: 1.4em 1.2em 1.2em;
+        border-radius: var(--fj-radius);
+    }
+
+    .formDialog:not(.dialog-fullscreen) {
+        border-radius: var(--fj-radius) !important;
+    }
+
+    /* Thumb-friendly hit areas */
+    .paper-icon-button-light {
+        min-width: 2.6em;
+        min-height: 2.6em;
+    }
+}
+
+.layout-mobile .emby-tab-button {
+    padding: 0.5em 0.85em;
+}
+
+/* Touch devices: no hover lift; give active-press feedback instead */
+@media (hover: none) {
+    .cardScalable {
+        transition: transform var(--fj-t-fast) var(--fj-ease);
+    }
+
+    .card:active .cardScalable {
+        transform: scale(0.97);
+    }
+
+    .emby-button:active,
+    .paper-icon-button-light:active {
+        transform: scale(0.95);
+    }
+
+    /* Hide desktop scroller chevrons, trust swipe */
+    .emby-scrollbuttons {
+        display: none !important;
+    }
+}
+
+/* Ultra-wide: breathe */
+@media (min-width: 2200px) {
+    .homeSectionsContainer,
+    .detailPageContent {
+        max-width: 2100px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+/* ============================================================================
+   25  RESPONSIVE — TV & FOCUS NAVIGATION
+   ----------------------------------------------------------------------------
+   TV browsers get: no backdrop blur (GPU cost), a loud gradient focus ring,
+   bigger type, and zero hover-dependent affordances.
+   ========================================================================== */
+
+.layout-tv .skinHeader::before,
+.layout-tv .mainDrawer,
+.layout-tv .dialog,
+.layout-tv .formDialog,
+.layout-tv .actionSheet,
+.layout-tv .videoOsdBottom .osdControls,
+.layout-tv .toast,
+.layout-tv .nowPlayingBar,
+.layout-tv .upNextDialog {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+.layout-tv .dialog,
+.layout-tv .formDialog,
+.layout-tv .actionSheet,
+.layout-tv .upNextDialog {
+    background: rgb(var(--fj-bg-elevated)) !important;
+}
+
+.layout-tv .videoOsdBottom .osdControls {
+    background: rgba(var(--fj-bg), 0.92);
+}
+
+.layout-tv .backgroundContainer::before,
+.layout-tv .backgroundContainer::after {
+    animation: none;
+}
+
+.layout-tv .homeSectionsContainer > .verticalSection {
+    animation: none;
+}
+
+.layout-tv .verticalSection .sectionTitle {
+    font-size: 1.5em;
+}
+
+/* The focus ring is the cursor on TV — make it unmistakable */
+.layout-tv .card:focus .cardScalable,
+.card.show-focus:focus .cardScalable {
+    transform: scale(1.045);
+    box-shadow: 0 0 0 3px rgb(var(--fj-accent)),
+                0 0 34px rgba(var(--fj-accent), 0.55),
+                0 18px 48px -12px rgba(0, 0, 0, 0.8);
+}
+
+.layout-tv .card:focus .cardScalable::after,
+.card.show-focus:focus .cardScalable::after {
+    opacity: 1;
+}
+
+.layout-tv .card:focus .cardText {
+    color: rgb(var(--fj-accent));
+}
+
+.layout-tv .emby-button:focus,
+.layout-tv .paper-icon-button-light:focus,
+.layout-tv .listItem:focus,
+.layout-tv .actionSheetMenuItem:focus,
+.layout-tv .navMenuOption:focus,
+.layout-tv .emby-tab-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(var(--fj-accent)),
+                0 0 24px rgba(var(--fj-accent), 0.45);
+    background: rgba(var(--fj-accent), 0.16);
+    color: rgb(var(--fj-ink));
+}
+
+.layout-tv .emby-tab-button:focus,
+.layout-tv .emby-button:focus {
+    transform: scale(1.05);
+}
+
+/* Media Bar on TV: hide pointer chrome, keep the story */
+.layout-tv #slides-container .arrow,
+.layout-tv #slides-container .pause-button,
+.layout-tv #slides-container .volume-toggle {
+    display: none !important;
+}
+
+.layout-tv ::-webkit-scrollbar {
+    display: none;
+}
+
+.layout-tv * {
+    scrollbar-width: none;
+}
+
+
+/* ============================================================================
+   26  MOTION & ACCESSIBILITY PREFERENCES
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .backgroundContainer::before,
+    .backgroundContainer::after {
+        animation: none;
+    }
+}
+
+@media (prefers-contrast: more) {
+    :root {
+        --fj-ink-dim: 200, 206, 224;
+        --fj-ink-faint: 165, 172, 195;
+        --fj-glass-alpha: 0.92;
+    }
+
+    .cardScalable,
+    .dialog,
+    .formDialog,
+    .emby-input,
+    .emby-select {
+        border-color: rgba(var(--fj-line), 0.45) !important;
+    }
+}
+
+/* ————————————————————————————————————————————————————————————————————————
+   fin. — FableJelly
+   ———————————————————————————————————————————————————————————————————————— */
