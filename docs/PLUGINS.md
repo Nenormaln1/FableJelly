@@ -51,6 +51,9 @@ Compatible forks that keep MakD's DOM (IAmParadox27's plugin packaging, media-ba
 | Maintenance banner | Warn-tinted glass |
 | Settings panel & hotkey sheet | Inherit via Layer 1 (dialog/form primitives) |
 
+> [!NOTE]
+> Keep Jellyfin Enhanced's **theme selector on "Default"**. FableJelly is applied through Custom CSS; selecting another theme there stacks two themes and produces mixed styling.
+
 ### Intro Skipper / Media Segments — [intro-skipper/intro-skipper](https://github.com/intro-skipper/intro-skipper)
 
 Skip buttons (any variant: the native 10.10+ `button.skip-button`, legacy `#skipIntro`, `btnSkipSegment`, and future lookalikes via the `[class*="skip"]` net) render as floating glass pills that fill with the gradient on hover/focus. The plugins' own fade-in/out timing is preserved.

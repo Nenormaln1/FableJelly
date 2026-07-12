@@ -78,7 +78,9 @@ Every visual decision in FableJelly flows through a design token — a CSS custo
 | `--fj-font-display` | `"Sora", …` | Titles, section headings, dialog headers |
 | `--fj-font-body` | `"Figtree", …` | Everything else |
 
-To use different fonts, add your own `@import` above the overrides:
+The core also loads **Onest** as a per-glyph fallback: any character Sora/Figtree don't cover (Cyrillic, extended Latin) renders in Onest instead of a system font, so non-English libraries stay in the theme's voice.
+
+The easiest way to change fonts is a ready-made pack from [`fonts/`](../fonts) (onest, inter, manrope, outfit, space-grotesk, system) — one import, both variables set, script coverage documented in each file. For anything else, add your own `@import` above the overrides:
 
 ```css
 @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fablejelly.css");

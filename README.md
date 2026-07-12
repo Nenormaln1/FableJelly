@@ -74,6 +74,28 @@ Stack as many as you like, in any order, after the core/preset imports:
 | [`motion-off`](addons/motion-off.css) | Freezes all animation (weak devices / taste) |
 | [`ambience-off`](addons/ambience-off.css) | Flat canvas — no aurora, no grain |
 
+## Fonts
+
+FableJelly ships with **Sora** (display) + **Figtree** (UI), backed by **Onest** so Cyrillic, Greek-adjacent and extended-Latin libraries render in the theme's voice instead of a system fallback.
+
+Not fixed — swap the whole UI's typography with one import after the core:
+
+```css
+@import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fonts/inter.css");
+```
+
+| Pack | Voice | Script coverage |
+| --- | --- | --- |
+| *(default)* Sora + Figtree | The FableJelly signature | Latin (+Cyrillic via Onest fallback) |
+| [`onest`](fonts/onest.css) | One consistent geometric everywhere | Latin, Latin-ext, **Cyrillic** |
+| [`inter`](fonts/inter.css) | The neutral professional | Latin, **Cyrillic**, Greek, Vietnamese |
+| [`manrope`](fonts/manrope.css) | Soft, rounded modern | Latin, **Cyrillic**, Greek |
+| [`outfit`](fonts/outfit.css) | Pure geometric, "streaming service" | Latin (+Cyrillic fallback) |
+| [`space-grotesk`](fonts/space-grotesk.css) | Technical headings, Inter body | Latin display, **Cyrillic** body |
+| [`system`](fonts/system.css) | Your OS's native font, zero downloads | Everything, instantly |
+
+Or point `--fj-font-display` / `--fj-font-body` at any font you like — see the guide below.
+
 ## Customize
 
 Everything is a CSS variable. Override any token *after* the imports — no forking needed:
@@ -143,6 +165,8 @@ How the auto-fit works — and how to request deeper support for a plugin — is
 ## FAQ
 
 **Fonts/icons don't load?** They come from Google Fonts and jsDelivr — clients need internet access. Everything degrades gracefully to system fonts and stock Material Icons.
+
+**Using Jellyfin Enhanced's theme selector?** Keep it set to **Default** — FableJelly lives in Custom CSS, and stacking a second theme on top will produce mixed styling.
 
 **Dashboard looks half-themed on 10.11?** The new React admin dashboard uses generated class names that custom CSS can't reliably target. User-facing surfaces are unaffected.
 

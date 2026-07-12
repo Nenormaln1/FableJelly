@@ -1,0 +1,15 @@
+/* ============================================================================
+   FABLEJELLY FONT PACK — MANROPE
+   Soft, rounded modern — friendlier than Inter, calmer than Sora.
+   Script coverage: Latin, Latin-ext, Cyrillic, Greek.
+   ----------------------------------------------------------------------------
+   Import AFTER the core:
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fonts/manrope.css");
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&display=swap");
+
+:root {
+    --fj-font-display: "Manrope", -apple-system, system-ui, sans-serif;
+    --fj-font-body: "Manrope", -apple-system, system-ui, sans-serif;
+}

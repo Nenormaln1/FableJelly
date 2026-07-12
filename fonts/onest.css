@@ -1,0 +1,16 @@
+/* ============================================================================
+   FABLEJELLY FONT PACK — ONEST
+   One family everywhere: geometric-humanist, excellent at UI sizes.
+   Script coverage: Latin, Latin-ext, Cyrillic. Great pick for non-English
+   libraries that want one consistent voice.
+   ----------------------------------------------------------------------------
+   Import AFTER the core:
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fonts/onest.css");
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Onest:wght@300..900&display=swap");
+
+:root {
+    --fj-font-display: "Onest", -apple-system, system-ui, sans-serif;
+    --fj-font-body: "Onest", -apple-system, system-ui, sans-serif;
+}

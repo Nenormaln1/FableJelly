@@ -1,0 +1,15 @@
+/* ============================================================================
+   FABLEJELLY FONT PACK — SPACE GROTESK
+   Technical character for headings, Inter for reading. The nerdy one.
+   Script coverage: display Latin/Latin-ext; body covers Cyrillic+Greek.
+   ----------------------------------------------------------------------------
+   Import AFTER the core:
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fonts/space-grotesk.css");
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Inter:opsz,wght@14..32,300..800&display=swap");
+
+:root {
+    --fj-font-display: "Space Grotesk", "Inter", -apple-system, system-ui, sans-serif;
+    --fj-font-body: "Inter", -apple-system, system-ui, sans-serif;
+}
