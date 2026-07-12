@@ -1498,25 +1498,34 @@ fieldset,
     box-shadow: 0 10px 30px -8px rgba(var(--fj-accent), 0.8);
 }
 
-/* Timeline: pill track that thickens under the pointer (YouTube-style) */
+/* Timeline: pill track that thickens under the pointer (YouTube-style).
+   Negative top margins keep it optically centred at both sizes (stock
+   positions the track at top:50% and offsets by half its height). */
 .videoOsdBottom .mdl-slider-background-flex {
     height: 5px;
+    margin-top: -2.5px;
     border-radius: var(--fj-radius-pill);
     overflow: hidden;
-    transition: height var(--fj-t-fast) var(--fj-ease);
+    transition: height var(--fj-t-fast) var(--fj-ease),
+                margin-top var(--fj-t-fast) var(--fj-ease);
 }
 
 .videoOsdBottom .sliderContainer:hover .mdl-slider-background-flex {
     height: 9px;
+    margin-top: -4.5px;
 }
 
-/* Chapter markers become tiny diamonds — the FableJelly tick motif */
+/* Chapter markers — a film can carry 20+ of them, so they stay slim ticks.
+   Geometry (2px wide, stock height/translate) is untouched; only recoloured:
+   ticks in the watched span read dark against the gradient, the rest stay
+   quiet on the empty track. */
 .sliderMarker {
-    width: 6px !important;
-    height: 6px !important;
-    border-radius: 1.5px !important;
-    background: rgba(var(--fj-ink), 0.6) !important;
-    transform: rotate(45deg);
+    border-radius: var(--fj-radius-pill);
+    background: rgba(var(--fj-ink), 0.3) !important;
+}
+
+.sliderMarker.watched {
+    background: rgba(var(--fj-bg), 0.65) !important;
 }
 
 /* Trickplay / chapter preview inside the seek bubble */
