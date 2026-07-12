@@ -96,10 +96,12 @@ The full token reference (60+ variables: colours, glass, shape, type, motion, am
 
 | Plugin | Level |
 | --- | --- |
-| [Media Bar](https://github.com/MakD/Jellyfin-Media-Bar) (MakD + forks) | **Bespoke** — gradient play pill, glass chips, elongating slide dots, themed loader |
-| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | **Bespoke** — quality tags, Seerr request buttons/cards, banners |
+| [Media Bar](https://github.com/MakD/Jellyfin-Media-Bar) (MakD + [plugin 2.x](https://github.com/IAmParadox27/jellyfin-plugin-media-bar)) | **Bespoke** — gradient play pill, glass chips, elongating slide dots, themed loader |
+| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | **Bespoke** — quality tags, OSD rating chips, bookmarks, pause screen, Seerr buttons/cards |
 | [Intro Skipper](https://github.com/intro-skipper/intro-skipper) / Media Segments | **Bespoke** — skip buttons become glass pills, gradient on hover |
+| [Custom Tabs](https://github.com/IAmParadox27/jellyfin-plugin-custom-tabs) | **Automatic** — tab strip themed; author content with Jellyfin primitives and it's native |
 | Home Screen Sections, Trickplay, Jellyscrub, Skin Manager… | **Automatic** — they reuse Jellyfin primitives, so they inherit the theme |
+| AudioDB, MusicBrainz, OMDb, TMDb, Open Subtitles, Studio Images… | **N/A** — server-side only; their settings pages inherit automatically |
 
 How the auto-fit works — and how to request deeper support for a plugin — is in **[docs/PLUGINS.md](docs/PLUGINS.md)**.
 

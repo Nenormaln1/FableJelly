@@ -44,13 +44,28 @@ Compatible forks that keep MakD's DOM (IAmParadox27's plugin packaging, media-ba
 | Feature | Treatment |
 | --- | --- |
 | Quality tags (`.quality-overlay-label`) | Glass chips; resolution gets an iris keyline, HDR/DV formats an ember one |
+| Player OSD ratings (`#je-osd-rating-container`) | Tomato/TMDB chips become glass pills; stars take the warn tone |
+| Smart bookmarks | Timeline markers glow ember; the bookmark modal, inputs and buttons are full FableJelly glass |
+| Pause screen | Progress bar takes the gradient; plot and metadata set in the theme's type |
 | Seerr integration | Request buttons take the gradient; pending/error states use the warn/danger tokens; discovery cards get a dashed accent frame |
 | Maintenance banner | Warn-tinted glass |
 | Settings panel & hotkey sheet | Inherit via Layer 1 (dialog/form primitives) |
 
 ### Intro Skipper / Media Segments — [intro-skipper/intro-skipper](https://github.com/intro-skipper/intro-skipper)
 
-Skip buttons (any variant: `skip-button`, `#skipIntro`, `btnSkipSegment`, and future lookalikes via the `[class*="skip"]` net) render as floating glass pills that fill with the gradient on hover/focus. Works with Jellyfin 10.10+ native media-segment buttons too.
+Skip buttons (any variant: the native 10.10+ `button.skip-button`, legacy `#skipIntro`, `btnSkipSegment`, and future lookalikes via the `[class*="skip"]` net) render as floating glass pills that fill with the gradient on hover/focus. The plugins' own fade-in/out timing is preserved.
+
+### Media Bar as a plugin — [IAmParadox27/jellyfin-plugin-media-bar](https://github.com/IAmParadox27/jellyfin-plugin-media-bar)
+
+The plugin packaging (2.x) ships MakD's implementation unchanged — verified selector-for-selector against 2.4.x — so it gets the full bespoke treatment above with no extra setup.
+
+### Custom Tabs — [IAmParadox27/jellyfin-plugin-custom-tabs](https://github.com/IAmParadox27/jellyfin-plugin-custom-tabs)
+
+The tab buttons themselves ride the themed tab strip automatically. Tab *content* is HTML you author; build it from Jellyfin primitives (`verticalSection`, `sectionTitle`, `cardBox`, `listItem`, `emby-button`) and it will look native in FableJelly for free. All `--fj-*` tokens are available to your custom CSS too.
+
+### Server-side plugins (no UI)
+
+AudioDB, MusicBrainz, OMDb, TMDb, Open Subtitles, Studio Images, Titlovi and similar metadata/scraper plugins render no web UI — their settings pages inherit via Layer 1. **File Transformation** is infrastructure other plugins use; nothing to theme.
 
 ## Requesting deeper support
 

@@ -333,6 +333,20 @@ h1, h2, h3,
     transform: translateX(2px);
 }
 
+/* Gradient underline draws itself in under clickable section titles */
+.sectionTitleTextButton .sectionTitle {
+    background-image: var(--fj-gradient);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 2px;
+    padding-bottom: 2px;
+    transition: background-size var(--fj-t) var(--fj-ease);
+}
+
+.sectionTitleTextButton:hover .sectionTitle {
+    background-size: 100% 2px;
+}
+
 .sectionTitleTextButton .material-icons {
     transition: transform var(--fj-t) var(--fj-ease-spring);
 }
@@ -403,6 +417,13 @@ h1, h2, h3,
     color: rgb(var(--fj-ink));
 }
 
+/* User avatar in the header gets a quiet accent ring */
+.headerButton img {
+    border-radius: 50%;
+    outline: 2px solid rgba(var(--fj-accent), 0.5);
+    outline-offset: 2px;
+}
+
 
 /* ============================================================================
    06  DRAWER (SIDEBAR)
@@ -461,6 +482,14 @@ h1, h2, h3,
 
 .navMenuOption-selected .navMenuOptionIcon {
     color: rgb(var(--fj-accent)) !important;
+}
+
+.navMenuOption .navMenuOptionIcon {
+    transition: transform var(--fj-t-fast) var(--fj-ease-spring);
+}
+
+.navMenuOption:hover .navMenuOptionIcon {
+    transform: translateX(2px);
 }
 
 .navMenuDivider {
@@ -799,7 +828,27 @@ h1, h2, h3,
     background: var(--fj-gradient) !important;
     color: rgb(var(--fj-on-accent)) !important;
     border: none;
+    position: relative;
+    overflow: hidden;
     box-shadow: 0 6px 22px -8px rgba(var(--fj-accent), 0.65);
+}
+
+/* Sheen sweep across the gradient on hover */
+.button-submit::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -30%;
+    width: 40%;
+    background: linear-gradient(105deg,
+        transparent, rgba(255, 255, 255, 0.32), transparent);
+    transform: translateX(-140%) skewX(-18deg);
+    pointer-events: none;
+}
+
+.button-submit:hover::before {
+    animation: fj-sheen 0.7s var(--fj-ease) forwards;
 }
 
 .emby-button.raised.button-submit:hover,
@@ -1102,6 +1151,10 @@ fieldset,
     transform: translateY(-2px);
 }
 
+.mainDetailButtons .detailButton:last-child {
+    margin-right: 0;
+}
+
 .mainDetailButtons .btnPlay,
 .mainDetailButtons .detailButton.btnPlay {
     background: var(--fj-gradient) !important;
@@ -1239,6 +1292,7 @@ fieldset,
 .formDialogFooter {
     background: transparent !important;
     border-top: 1px solid rgba(var(--fj-line), 0.08);
+    gap: 0.5em;
 }
 
 .formDialogFooterItem {
@@ -1363,8 +1417,17 @@ fieldset,
     color: rgb(var(--fj-ink-dim));
 }
 
-.osdTimeText {
+.osdTimeText,
+.videoOsdBottom .osdPositionText,
+.videoOsdBottom .osdDurationText {
     font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: rgb(var(--fj-ink-dim));
+}
+
+.videoOsdBottom .endsAtText {
+    color: rgb(var(--fj-ink-faint));
+    font-weight: 500;
 }
 
 .osdPoster {
@@ -1372,16 +1435,55 @@ fieldset,
     box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.8);
 }
 
+/* Symmetry: even breathing room between every control */
+.videoOsdBottom .paper-icon-button-light {
+    margin: 0 0.12em;
+}
+
 .videoOsdBottom .paper-icon-button-light:hover {
     background: rgba(var(--fj-ink), 0.1);
+    color: rgb(var(--fj-ink));
 }
 
-.videoOsdBottom .btnPause:hover,
-.videoOsdBottom .btnPlay:hover {
-    color: rgb(var(--fj-accent));
+/* Play/pause is the hero control — it carries the gradient */
+.videoOsdBottom .btnPause {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border-radius: var(--fj-radius-pill);
+    margin: 0 0.35em;
+    box-shadow: 0 6px 22px -8px rgba(var(--fj-accent), 0.6);
 }
 
-/* Chapter/scene markers inherit slider styling from section 12 */
+.videoOsdBottom .btnPause:hover {
+    transform: scale(1.07);
+    box-shadow: 0 10px 30px -8px rgba(var(--fj-accent), 0.8);
+}
+
+/* Timeline: pill track that thickens under the pointer (YouTube-style) */
+.videoOsdBottom .mdl-slider-background-flex {
+    height: 5px;
+    border-radius: var(--fj-radius-pill);
+    overflow: hidden;
+    transition: height var(--fj-t-fast) var(--fj-ease);
+}
+
+.videoOsdBottom .sliderContainer:hover .mdl-slider-background-flex {
+    height: 9px;
+}
+
+/* Chapter markers become tiny diamonds — the FableJelly tick motif */
+.sliderMarker {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 1.5px !important;
+    background: rgba(var(--fj-ink), 0.6) !important;
+    transform: rotate(45deg);
+}
+
+/* Trickplay / chapter preview inside the seek bubble */
+.sliderBubble img {
+    border-radius: calc(var(--fj-radius-sm) - 4px);
+}
 
 /* Loading spinner accent */
 .mdlSpinner,
@@ -1597,6 +1699,15 @@ fieldset,
     color: rgb(var(--fj-accent)) !important;
 }
 
+/* Quick Connect code — set like a boarding pass */
+#txtQuickConnectCode {
+    font-family: var(--fj-font-display);
+    font-size: 1.6em;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-align: center;
+}
+
 /* Guide (Live TV) — light touch */
 .guide-headerTimeslots,
 .guide-channelHeaderCell,
@@ -1706,7 +1817,12 @@ fieldset,
     filter: brightness(1.28) drop-shadow(0 8px 28px rgba(0, 0, 0, 0.55));
 }
 
-/* Buttons — gradient play pill, glass companions */
+/* Buttons — gradient play pill, glass companions.
+   The row is made symmetric: the pill matches the 50px circles exactly. */
+#slides-container .button-container {
+    align-items: center;
+}
+
 #slides-container .play-button {
     font-family: var(--fj-font-body) !important;
     font-weight: 700 !important;
@@ -1714,11 +1830,38 @@ fieldset,
     color: rgb(var(--fj-on-accent)) !important;
     border: none !important;
     border-radius: var(--fj-radius-pill) !important;
-    padding: 10px 22px !important;
+    min-height: 50px;
+    padding: 0 26px !important;
+    position: relative;
+    overflow: hidden;
     box-shadow: 0 8px 28px -8px rgba(var(--fj-accent), 0.7);
     transition: transform var(--fj-t-fast) var(--fj-ease-spring),
                 box-shadow var(--fj-t-fast) var(--fj-ease),
                 filter var(--fj-t-fast) var(--fj-ease) !important;
+}
+
+/* Sheen sweep on hover (::before holds the play icon, so ::after is free) */
+#slides-container .play-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -30%;
+    width: 40%;
+    background: linear-gradient(105deg,
+        transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: translateX(-140%) skewX(-18deg);
+    pointer-events: none;
+}
+
+#slides-container .play-button:hover::after {
+    animation: fj-sheen 0.7s var(--fj-ease) forwards;
+}
+
+@keyframes fj-sheen {
+    to {
+        transform: translateX(440%) skewX(-18deg);
+    }
 }
 
 #slides-container .play-button:hover {
@@ -1735,6 +1878,12 @@ fieldset,
     backdrop-filter: blur(10px);
     color: rgb(var(--fj-ink)) !important;
     border: 1px solid rgba(var(--fj-line), 0.16) !important;
+    width: 50px !important;
+    height: 50px !important;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: transform var(--fj-t-fast) var(--fj-ease-spring),
                 background-color var(--fj-t-fast) var(--fj-ease) !important;
 }
@@ -1889,6 +2038,133 @@ body:has(#slides-container) .homeSectionsContainer {
     backdrop-filter: blur(10px);
 }
 
+/* Player OSD rating chips (Rotten Tomatoes / TMDB) → glass pills */
+#je-osd-rating-container {
+    gap: 6px;
+    margin-left: 0.5em;
+}
+
+#je-osd-rating-container .je-chip {
+    background: rgba(var(--fj-surface-2), 0.6) !important;
+    border: 1px solid rgba(var(--fj-line), 0.16);
+    border-radius: var(--fj-radius-pill) !important;
+    padding: 0.3em 0.7em !important;
+}
+
+#je-osd-rating-container .je-chip.critic {
+    color: rgb(var(--fj-ink)) !important;
+}
+
+#je-osd-rating-container .je-chip.tmdb,
+#je-osd-rating-container .je-star {
+    color: rgb(var(--fj-warn)) !important;
+}
+
+/* Smart bookmarks — markers on the timeline + the management modal */
+.je-bookmark-marker {
+    background: rgb(var(--fj-accent-2)) !important;
+    border-radius: var(--fj-radius-pill);
+    box-shadow: 0 0 8px rgba(var(--fj-accent-2), 0.6);
+}
+
+.je-bookmark-modal,
+.je-bm-player-modal-container {
+    background: rgba(var(--fj-glass), 0.92) !important;
+    -webkit-backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    backdrop-filter: blur(var(--fj-glass-blur)) saturate(1.4);
+    border: 1px solid var(--fj-glass-border) !important;
+    border-radius: var(--fj-radius-lg) !important;
+    color: rgb(var(--fj-ink));
+    box-shadow: 0 40px 120px -32px rgba(0, 0, 0, 0.85);
+}
+
+.je-bm-player-modal-overlay {
+    background: rgba(4, 5, 10, 0.55) !important;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.je-bookmark-hero-title,
+.je-bookmark-list-title {
+    font-family: var(--fj-font-display);
+    font-weight: 700;
+}
+
+.je-bookmark-input {
+    background: rgba(var(--fj-surface), 0.9) !important;
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.14) !important;
+    border-radius: var(--fj-radius-sm) !important;
+}
+
+.je-bookmark-input:focus {
+    border-color: rgba(var(--fj-accent), 0.75) !important;
+    box-shadow: 0 0 0 3px rgba(var(--fj-accent), 0.18);
+    outline: none;
+}
+
+.je-bookmark-btn-submit {
+    background: var(--fj-gradient) !important;
+    color: rgb(var(--fj-on-accent)) !important;
+    border: none !important;
+    border-radius: var(--fj-radius-pill) !important;
+    font-weight: 700;
+}
+
+.je-bookmark-btn-cancel,
+.je-bookmark-modal-close {
+    background: rgba(var(--fj-surface-2), 0.85) !important;
+    color: rgb(var(--fj-ink)) !important;
+    border: 1px solid rgba(var(--fj-line), 0.12) !important;
+    border-radius: var(--fj-radius-pill) !important;
+}
+
+.je-bookmark-item {
+    border-radius: var(--fj-radius-sm);
+    transition: background-color var(--fj-t-fast) var(--fj-ease);
+}
+
+.je-bookmark-item:hover {
+    background: rgba(var(--fj-ink), 0.06) !important;
+}
+
+.je-bookmark-item-marker {
+    background: rgb(var(--fj-accent)) !important;
+}
+
+.je-bookmark-item-time {
+    color: rgb(var(--fj-accent-2)) !important;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Pause screen — recolour its progress + type; leave its layout alone */
+#pause-screen-progress-bar {
+    background: rgba(var(--fj-ink), 0.16) !important;
+    border-radius: var(--fj-radius-pill);
+    overflow: hidden;
+}
+
+#pause-screen-progress-bar > span {
+    background: var(--fj-gradient) !important;
+    border-radius: var(--fj-radius-pill);
+}
+
+#pause-screen-details,
+#pause-screen-plot,
+#pause-screen-progress-meta {
+    font-family: var(--fj-font-body) !important;
+}
+
+#pause-screen-plot {
+    color: rgba(var(--fj-ink), 0.75) !important;
+    line-height: 1.6;
+}
+
+#pause-screen-progress-meta .progress-percentage {
+    color: rgb(var(--fj-accent)) !important;
+    font-weight: 700;
+}
+
 
 /* ============================================================================
    23  PLUGIN — SKIP BUTTONS & GENERIC AUTO-FIT
@@ -1920,8 +2196,10 @@ button#skipIntro,
     letter-spacing: 0.02em;
     padding: 0.7em 1.5em !important;
     box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.7);
+    /* opacity stays in the list so the plugins' own fade in/out keeps working */
     transition: background var(--fj-t-fast) var(--fj-ease),
                 color var(--fj-t-fast) var(--fj-ease),
+                opacity var(--fj-t) var(--fj-ease),
                 transform var(--fj-t-fast) var(--fj-ease-spring) !important;
 }
 
