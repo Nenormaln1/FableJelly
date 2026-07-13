@@ -1,0 +1,16 @@
+/* ============================================================================
+   FABLEJELLY FONT PACK — OUTFIT
+   Pure geometric — the "streaming service" look, circles and clean bowls.
+   Script coverage: Latin, Latin-ext only (Cyrillic falls back to Onest
+   from the core import).
+   ----------------------------------------------------------------------------
+   Import AFTER the core:
+   @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fonts/outfit.css");
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300..800&display=swap");
+
+:root {
+    --fj-font-display: "Outfit", "Onest", -apple-system, system-ui, sans-serif;
+    --fj-font-body: "Outfit", "Onest", -apple-system, system-ui, sans-serif;
+}

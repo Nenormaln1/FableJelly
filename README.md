@@ -74,6 +74,28 @@ Stack as many as you like, in any order, after the core/preset imports:
 | [`motion-off`](addons/motion-off.css) | Freezes all animation (weak devices / taste) |
 | [`ambience-off`](addons/ambience-off.css) | Flat canvas — no aurora, no grain |
 
+## Fonts
+
+FableJelly ships with **Sora** (display) + **Figtree** (UI), backed by **Onest** so Cyrillic, Greek-adjacent and extended-Latin libraries render in the theme's voice instead of a system fallback.
+
+Not fixed — swap the whole UI's typography with one import after the core:
+
+```css
+@import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fonts/inter.css");
+```
+
+| Pack | Voice | Script coverage |
+| --- | --- | --- |
+| *(default)* Sora + Figtree | The FableJelly signature | Latin (+Cyrillic via Onest fallback) |
+| [`onest`](fonts/onest.css) | One consistent geometric everywhere | Latin, Latin-ext, **Cyrillic** |
+| [`inter`](fonts/inter.css) | The neutral professional | Latin, **Cyrillic**, Greek, Vietnamese |
+| [`manrope`](fonts/manrope.css) | Soft, rounded modern | Latin, **Cyrillic**, Greek |
+| [`outfit`](fonts/outfit.css) | Pure geometric, "streaming service" | Latin (+Cyrillic fallback) |
+| [`space-grotesk`](fonts/space-grotesk.css) | Technical headings, Inter body | Latin display, **Cyrillic** body |
+| [`system`](fonts/system.css) | Your OS's native font, zero downloads | Everything, instantly |
+
+Or point `--fj-font-display` / `--fj-font-body` at any font you like — see the guide below.
+
 ## Customize
 
 Everything is a CSS variable. Override any token *after* the imports — no forking needed:
@@ -96,10 +118,12 @@ The full token reference (60+ variables: colours, glass, shape, type, motion, am
 
 | Plugin | Level |
 | --- | --- |
-| [Media Bar](https://github.com/MakD/Jellyfin-Media-Bar) (MakD + forks) | **Bespoke** — gradient play pill, glass chips, elongating slide dots, themed loader |
-| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | **Bespoke** — quality tags, Seerr request buttons/cards, banners |
+| [Media Bar](https://github.com/MakD/Jellyfin-Media-Bar) (MakD + [plugin 2.x](https://github.com/IAmParadox27/jellyfin-plugin-media-bar)) | **Bespoke** — gradient play pill, glass chips, elongating slide dots, themed loader |
+| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | **Bespoke** — quality tags, OSD rating chips, bookmarks, pause screen, Seerr buttons/cards |
 | [Intro Skipper](https://github.com/intro-skipper/intro-skipper) / Media Segments | **Bespoke** — skip buttons become glass pills, gradient on hover |
+| [Custom Tabs](https://github.com/IAmParadox27/jellyfin-plugin-custom-tabs) | **Automatic** — tab strip themed; author content with Jellyfin primitives and it's native |
 | Home Screen Sections, Trickplay, Jellyscrub, Skin Manager… | **Automatic** — they reuse Jellyfin primitives, so they inherit the theme |
+| AudioDB, MusicBrainz, OMDb, TMDb, Open Subtitles, Studio Images… | **N/A** — server-side only; their settings pages inherit automatically |
 
 How the auto-fit works — and how to request deeper support for a plugin — is in **[docs/PLUGINS.md](docs/PLUGINS.md)**.
 
@@ -130,9 +154,15 @@ How the auto-fit works — and how to request deeper support for a plugin — is
 
 </details>
 
-## Version pinning
+## Version pinning & updates
 
-`@latest` tracks the newest commit (jsDelivr caches ~12h). To pin, use a commit hash:
+`@latest` serves the **main branch**, and jsDelivr caches it for ~12 hours. Two consequences:
+
+- New fixes only reach you after they're **merged to main** — a hard refresh can't bypass the CDN.
+- After a merge, you can force the CDN to refresh immediately by opening
+  `https://purge.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fablejelly.css` in a browser (repeat for any preset/addon files you import).
+
+To pin an exact version (updates never surprise you), use a commit hash instead:
 
 ```css
 @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@<commit-sha>/fablejelly.css");
@@ -141,6 +171,8 @@ How the auto-fit works — and how to request deeper support for a plugin — is
 ## FAQ
 
 **Fonts/icons don't load?** They come from Google Fonts and jsDelivr — clients need internet access. Everything degrades gracefully to system fonts and stock Material Icons.
+
+**Using Jellyfin Enhanced's theme selector?** Keep it set to **Default** — FableJelly lives in Custom CSS, and stacking a second theme on top will produce mixed styling.
 
 **Dashboard looks half-themed on 10.11?** The new React admin dashboard uses generated class names that custom CSS can't reliably target. User-facing surfaces are unaffected.
 

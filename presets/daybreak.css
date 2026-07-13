@@ -77,8 +77,33 @@
     opacity: 0.35;
 }
 
-/* Media Bar text shadows read differently on porcelain */
-#slides-container .plot,
-#slides-container .info-container {
-    text-shadow: 0 1px 10px rgba(255, 255, 255, 0.35);
+/* Media Bar hero text sits over ARTWORK, not the porcelain canvas —
+   keep it light with dark shadows no matter what the theme ink says. */
+#slides-container .plot {
+    color: rgba(255, 255, 255, 0.88) !important;
+    text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55);
+}
+
+#slides-container .info-container,
+#slides-container .genre,
+#slides-container .date,
+#slides-container .runTime,
+#slides-container .misc-info {
+    color: #fff !important;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
+}
+
+#slides-container .age-rating {
+    background: rgba(20, 23, 38, 0.55) !important;
+    color: #fff !important;
+}
+
+#slides-container .detail-button,
+#slides-container .favorite-button {
+    background: rgba(20, 23, 38, 0.5) !important;
+    color: #fff !important;
+}
+
+.dots-container .dot {
+    background-color: rgba(255, 255, 255, 0.45);
 }
