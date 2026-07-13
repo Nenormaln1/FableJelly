@@ -154,9 +154,15 @@ How the auto-fit works — and how to request deeper support for a plugin — is
 
 </details>
 
-## Version pinning
+## Version pinning & updates
 
-`@latest` tracks the newest commit (jsDelivr caches ~12h). To pin, use a commit hash:
+`@latest` serves the **main branch**, and jsDelivr caches it for ~12 hours. Two consequences:
+
+- New fixes only reach you after they're **merged to main** — a hard refresh can't bypass the CDN.
+- After a merge, you can force the CDN to refresh immediately by opening
+  `https://purge.jsdelivr.net/gh/Nenormaln1/FableJelly@latest/fablejelly.css` in a browser (repeat for any preset/addon files you import).
+
+To pin an exact version (updates never surprise you), use a commit hash instead:
 
 ```css
 @import url("https://cdn.jsdelivr.net/gh/Nenormaln1/FableJelly@<commit-sha>/fablejelly.css");
